@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>物流系统后台</title>
+
+    <!-- Bootstrap -->
+    <link href="#" th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="#" th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="#" th:href="@{/vendors/nprogress/nprogress.css}" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="#" th:href="@{/vendors/iCheck/skins/flat/green.css}" rel="stylesheet">
+	
+    <!-- bootstrap-progressbar -->
+    <link href="#" th:href="@{/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css}" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="#" th:href="@{/vendors/jqvmap/dist/jqvmap.min.css}" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="#" th:href="@{/vendors/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="#" th:href="@{/build/css/custom.min.css}" rel="stylesheet">
+      <!-- bootstrap-addtabs Style -->
+      <link href="#" th:href="@{/build/css/bootstrap.addtabs.css}" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>图南</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>欢迎,</span>
+                <h2>张三</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- 左侧菜单-->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>通用</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-home"></i> 客户管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li>
+                          <a data-addtab="mail" data-url="/login">login</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-edit"></i> 订单管理<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li><a data-addtab="mail" data-url="/login">login</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-desktop"></i> 收货管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li><a data-addtab="mail" data-url="/login">login</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-table"></i> 出货管理<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li><a data-addtab="mail" data-url="/login">login</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-bar-chart-o"></i> 配送管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li><a data-addtab="mail" data-url="/login">login</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-clone"></i>货物管理<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li><a data-addtab="mail" data-url="/login">login</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-clone"></i>结算管理<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li><a data-addtab="mail" data-url="/login">login</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>系统</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-bug"></i>系统管理 <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu list-group">
+                      <li><a data-addtab="mail" data-url="/login">login</a></li>
+                    </ul>
+                  </li>
+                    <li><a><i class="fa fa-bug"></i>工作流管理 <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu list-group">
+                            <li><a data-addtab="mail" data-url="/login">login</a></li>
+                        </ul>
+                    </li>
+                </ul>
+              </div>
+
+            </div>
+            <!-- /左侧菜单完结-->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="images/img.jpg" alt="">张三
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">1</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col tab-content" role="main">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">I'm a homepage.</div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            图南 - Bootstrap Admin Template by Colorlib. More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="#" th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+    <!-- Bootstrap -->
+    <script src="#" th:src="@{/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <!-- FastClick -->
+    <script src="#" th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+    <!-- NProgress -->
+    <script src="#" th:src="@{/vendors/nprogress/nprogress.js}"></script>
+    <!-- Chart.js -->
+    <script src="#" th:src="@{/vendors/Chart.js/dist/Chart.min.js}"></script>
+    <!-- gauge.js -->
+    <script src="#" th:src="@{/vendors/gauge.js/dist/gauge.min.js}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="#" th:src="@{/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js}"></script>
+    <!-- iCheck -->
+    <script src="#" th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+    <!-- Skycons -->
+    <script src="#" th:src="@{/vendors/skycons/skycons.js}"></script>
+    <!-- Flot -->
+    <script src="#" th:src="@{/vendors/Flot/jquery.flot.js}"></script>
+    <script src="#" th:src="@{/vendors/Flot/jquery.flot.pie.js}"></script>
+    <script src="#" th:src="@{/vendors/Flot/jquery.flot.time.js}"></script>
+    <script src="#" th:src="@{/vendors/Flot/jquery.flot.stack.js}"></script>
+    <script src="#" th:src="@{/vendors/Flot/jquery.flot.resize.js}"></script>
+    <!-- Flot plugins -->
+    <script src="#" th:src="@{/vendors/flot.orderbars/js/jquery.flot.orderBars.js}"></script>
+    <script src="#" th:src="@{/vendors/flot-spline/js/jquery.flot.spline.min.js}"></script>
+    <script src="#" th:src="@{/vendors/flot.curvedlines/curvedLines.js}"></script>
+    <!-- DateJS -->
+    <script src="#" th:src="@{/vendors/DateJS/build/date.js}"></script>
+    <!-- JQVMap -->
+    <script src="#" th:src="@{/vendors/jqvmap/dist/jquery.vmap.js}"></script>
+    <script src="#" th:src="@{/vendors/jqvmap/dist/maps/jquery.vmap.world.js}"></script>
+    <script src="#" th:src="@{/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js}"> </script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="#" th:src="@{/vendors/moment/min/moment.min.js}"></script>
+    <script src="#" th:src="@{/vendors/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="#" th:src="@{/build/js/custom.min.js}"></script>
+    <!-- bootstrap.addtabs js -->
+    <script src="#" th:src="@{/build/js/bootstrap.addtabs.js}"></script>
+	
+  </body>
+</html>

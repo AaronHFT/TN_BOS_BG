@@ -1,0 +1,18 @@
+server:
+  port: 9999
+
+mybatis:
+  config-location: classpath:mybatis/mybatis.cfg.xml  #mybatis\u6240\u5728\u8DEF\u5F84
+  mapper-locations:
+  - classpath:mybatis/mapper/**/*.xml #mapper\u6620\u5C04\u6587\u4EF6
+
+spring:
+  application:
+    name: tn_bos_background
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/tn_bos?useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+  thymeleaf:
+    cache: false
