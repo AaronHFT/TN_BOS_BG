@@ -1,239 +1,147 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>物流系统后台</title>
-
-    <!-- Bootstrap -->
-    <link href="#" th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="#" th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="#" th:href="@{/vendors/nprogress/nprogress.css}" rel="stylesheet">
-    <!-- iCheck -->
-    <link href="#" th:href="@{/vendors/iCheck/skins/flat/green.css}" rel="stylesheet">
-	
-    <!-- bootstrap-progressbar -->
-    <link href="#" th:href="@{/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css}" rel="stylesheet">
-    <!-- JQVMap -->
-    <link href="#" th:href="@{/vendors/jqvmap/dist/jqvmap.min.css}" rel="stylesheet"/>
-    <!-- bootstrap-daterangepicker -->
-    <link href="#" th:href="@{/vendors/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
-
-    <!-- Custom Theme Style -->
-    <link href="#" th:href="@{/build/css/custom.min.css}" rel="stylesheet">
-      <!-- bootstrap-addtabs Style -->
-      <link href="#" th:href="@{/build/css/bootstrap.addtabs.css}" rel="stylesheet">
-  </head>
-
-  <body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
-        <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>图南</span></a>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <!-- menu profile quick info -->
-            <div class="profile clearfix">
-              <div class="profile_pic">
-                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
-              </div>
-              <div class="profile_info">
-                <span>欢迎,</span>
-                <h2>张三</h2>
-              </div>
-            </div>
-            <!-- /menu profile quick info -->
-
-            <br />
-
-            <!-- 左侧菜单-->
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                <h3>通用</h3>
-                <ul class="nav side-menu">
-                  <li><a><i class="fa fa-home"></i> 客户管理 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li>
-                          <a data-addtab="mail" data-url="/login">login</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-edit"></i> 订单管理<span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li><a data-addtab="mail" data-url="/login">login</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-desktop"></i> 收货管理 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li><a data-addtab="mail" data-url="/login">login</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-table"></i> 出货管理<span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li><a data-addtab="mail" data-url="/login">login</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-bar-chart-o"></i> 配送管理 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li><a data-addtab="mail" data-url="/login">login</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-clone"></i>货物管理<span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li><a data-addtab="mail" data-url="/login">login</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-clone"></i>结算管理<span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li><a data-addtab="mail" data-url="/login">login</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-              <div class="menu_section">
-                <h3>系统</h3>
-                <ul class="nav side-menu">
-                  <li><a><i class="fa fa-bug"></i>系统管理 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu list-group">
-                      <li><a data-addtab="mail" data-url="/login">login</a></li>
-                    </ul>
-                  </li>
-                    <li><a><i class="fa fa-bug"></i>工作流管理 <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu list-group">
-                            <li><a data-addtab="mail" data-url="/login">login</a></li>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
+    <title>物流管理系统首页</title>
+    <meta name="keywords" content="物流管理系统首页">
+    <meta name="description" content="物流管理系统首页">
+</head>
+<body>
+<header class="navbar-wrapper">
+    <div class="navbar navbar-fixed-top">
+        <div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="#">欢迎使用物流管理系统</a> <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="#">TN</a>
+            <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+                <ul class="cl">
+                    <li>欢迎</li>
+                    <li class="dropDown dropDown_hover">
+                        <a href="#" class="dropDown_A">张三 <i class="Hui-iconfont">&#xe6d5;</i></a>
+                        <ul class="dropDown-menu menu radius box-shadow">
+                            <li><a href="#" th:href="@{/login}">退出</a></li>
+                        </ul>
+                    </li>
+                    <li id="Hui-skin" class="dropDown right dropDown_hover"> <a href="javascript:;" class="dropDown_A" title="换肤"><i class="Hui-iconfont" style="font-size:18px">&#xe62a;</i></a>
+                        <ul class="dropDown-menu menu radius box-shadow">
+                            <li><a href="javascript:;" data-val="default" title="默认（黑色）">默认（黑色）</a></li>
+                            <li><a href="javascript:;" data-val="blue" title="蓝色">蓝色</a></li>
+                            <li><a href="javascript:;" data-val="green" title="绿色">绿色</a></li>
+                            <li><a href="javascript:;" data-val="red" title="红色">红色</a></li>
+                            <li><a href="javascript:;" data-val="yellow" title="黄色">黄色</a></li>
+                            <li><a href="javascript:;" data-val="orange" title="橙色">橙色</a></li>
                         </ul>
                     </li>
                 </ul>
-              </div>
-
-            </div>
-            <!-- /左侧菜单完结-->
-          </div>
-        </div>
-
-        <!-- top navigation -->
-        <div class="top_nav">
-          <div class="nav_menu">
-            <nav>
-              <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-              </div>
-
-              <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/img.jpg" alt="">张三
-                    <span class=" fa fa-angle-down"></span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                  </ul>
-                </li>
-
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">1</span>
-                  </a>
-                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                      <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
             </nav>
-          </div>
         </div>
-        <!-- /top navigation -->
-
-        <!-- page content -->
-        <div class="right_col tab-content" role="main">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active">
-                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-            </ul>
-
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="home">I'm a homepage.</div>
-            </div>
-        </div>
-        <!-- /page content -->
-
-        <!-- footer content -->
-        <footer>
-          <div class="pull-right">
-            图南 - Bootstrap Admin Template by Colorlib. More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
-          </div>
-          <div class="clearfix"></div>
-        </footer>
-        <!-- /footer content -->
-      </div>
     </div>
+</header>
+<aside class="Hui-aside">
+    <div class="menu_dropdown bk_2">
+        <dl>
+            <dt><i class="Hui-iconfont">&#xe616;</i> 总务管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a data-href="${pageContext.request.contextPath }/general/findAllMeeting.do" data-title="会议申请" href="javascript:void(0)">会议申请</a></li>
+                </ul>
+            </dd>
+        </dl>
+            <dl>
+                <dt><i class="Hui-iconfont">&#xe616;</i> 资源管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+                <dd>
+                    <ul>
+                        <li><a data-href="${pageContext.request.contextPath }/Products/NewFile.do" data-title="新增用品" href="javascript:void(0)">新增用品</a></li>
+                    </ul>
+                </dd>
+            </dl>
+        <dl>
+            <dt><i class="Hui-iconfont">&#xe616;</i>邮件管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a data-href="${pageContext.request.contextPath }/background/mail/sendEmail.jsp" data-title="写邮件" href="javascript:void(0)">写邮件</a></li>
+                </ul>
+            </dd>
+        </dl>
+            <dl>
+                <dt><i class="Hui-iconfont">&#xe616;</i> 人事管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+                <dd>
+                    <ul>
+                        <li><a data-href="${pageContext.request.contextPath }/personnel/departmentshow.do" data-title="部门管理"  href="javascript:void(0)">部门管理</a></li>
+                        <li><a data-href="${pageContext.request.contextPath }/personnel/clerkshow.do" data-title="职员管理"  href="javascript:void(0)">职员管理</a></li>
+                    </ul>
+                </dd>
+            </dl>
+        <dl>
+            <dt><i class="Hui-iconfont">&#xe616;</i> 文档管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a data-href="${pageContext.request.contextPath }/document/showdocument.do" data-title="文件管理"  href="javascript:void(0)">文件管理</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt><i class="Hui-iconfont">&#xe616;</i> 考勤管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="员工签到退到" href="javascript:void(0)">员工签到退到</a></li>
+                </ul>
+            </dd>
+        </dl>
+            <dl>
+                <dt><i class="Hui-iconfont">&#xe616;</i> 工作流管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+                <dd>
+                    <ul>
+                        <li><a data-href="#" th:data-href="@{/process/showProcessDefinition}" data-title="流程定义管理" href="javascript:void(0)">流程定义管理</a></li>
+                        <li><a data-href="#" th:data-href="@{/process/showRunProcessInstance}" data-title="运行实例管理" href="javascript:void(0)">运行实例管理</a></li>
+                        <li><a data-href="#" th:data-href="@{/process/showHisProcessInstance}" data-title="历史实例管理" href="javascript:void(0)">历史实例管理</a></li>
+                    </ul>
+                </dd>
+            </dl>
+    </div>
+</aside>
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+<section class="Hui-article-box">
+    <div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
+        <div class="Hui-tabNav-wp">
+            <ul id="min_title_list" class="acrossTab cl">
+                <li class="active">
+                    <span title="我的桌面" data-href="welcome.html">我的桌面</span>
+                    <em></em></li>
+            </ul>
+        </div>
+        <div class="Hui-tabNav-more btn-group"><a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d4;</i></a><a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d7;</i></a></div>
+    </div>
+    <div id="iframe_box" class="Hui-article">
+        <div class="show_iframe">
+            <div style="display:none" class="loading"></div>
+            <img th:src="@{/huistatic/index.jpg}" src="#" alt="欢迎页面" width="100%" height="100%"/>
+            <!--<iframe scrolling="yes" frameborder="0" src="#"></iframe>-->
+        </div>
+    </div>
+</section>
 
-    <!-- jQuery -->
-    <script src="#" th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
-    <!-- Bootstrap -->
-    <script src="#" th:src="@{/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
-    <!-- FastClick -->
-    <script src="#" th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
-    <!-- NProgress -->
-    <script src="#" th:src="@{/vendors/nprogress/nprogress.js}"></script>
-    <!-- Chart.js -->
-    <script src="#" th:src="@{/vendors/Chart.js/dist/Chart.min.js}"></script>
-    <!-- gauge.js -->
-    <script src="#" th:src="@{/vendors/gauge.js/dist/gauge.min.js}"></script>
-    <!-- bootstrap-progressbar -->
-    <script src="#" th:src="@{/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js}"></script>
-    <!-- iCheck -->
-    <script src="#" th:src="@{/vendors/iCheck/icheck.min.js}"></script>
-    <!-- Skycons -->
-    <script src="#" th:src="@{/vendors/skycons/skycons.js}"></script>
-    <!-- Flot -->
-    <script src="#" th:src="@{/vendors/Flot/jquery.flot.js}"></script>
-    <script src="#" th:src="@{/vendors/Flot/jquery.flot.pie.js}"></script>
-    <script src="#" th:src="@{/vendors/Flot/jquery.flot.time.js}"></script>
-    <script src="#" th:src="@{/vendors/Flot/jquery.flot.stack.js}"></script>
-    <script src="#" th:src="@{/vendors/Flot/jquery.flot.resize.js}"></script>
-    <!-- Flot plugins -->
-    <script src="#" th:src="@{/vendors/flot.orderbars/js/jquery.flot.orderBars.js}"></script>
-    <script src="#" th:src="@{/vendors/flot-spline/js/jquery.flot.spline.min.js}"></script>
-    <script src="#" th:src="@{/vendors/flot.curvedlines/curvedLines.js}"></script>
-    <!-- DateJS -->
-    <script src="#" th:src="@{/vendors/DateJS/build/date.js}"></script>
-    <!-- JQVMap -->
-    <script src="#" th:src="@{/vendors/jqvmap/dist/jquery.vmap.js}"></script>
-    <script src="#" th:src="@{/vendors/jqvmap/dist/maps/jquery.vmap.world.js}"></script>
-    <script src="#" th:src="@{/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js}"> </script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="#" th:src="@{/vendors/moment/min/moment.min.js}"></script>
-    <script src="#" th:src="@{/vendors/bootstrap-daterangepicker/daterangepicker.js}"></script>
-
-    <!-- Custom Theme Scripts -->
-    <script src="#" th:src="@{/build/js/custom.min.js}"></script>
-    <!-- bootstrap.addtabs js -->
-    <script src="#" th:src="@{/build/js/bootstrap.addtabs.js}"></script>
-	
-  </body>
+<div class="contextMenu" id="Huiadminmenu">
+    <ul>
+        <li id="closethis">关闭当前 </li>
+        <li id="closeall">关闭全部 </li>
+    </ul>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
+</body>
 </html>

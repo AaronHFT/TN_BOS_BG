@@ -16,3 +16,15 @@ spring:
     password: root
   thymeleaf:
     cache: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  activiti:
+    check-process-definitions: false
+  servlet:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 100Mb
+
+

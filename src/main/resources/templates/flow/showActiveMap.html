@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<img style="position: absolute;left:0px;top:0px" th:src="@{/process/showResouce(processDefintionId=${processDefinitionId},type=png)}" src="#"/>
+
+<div th:style="position:absolute;border:3px solid red;left:${x-3}px;top:${y-3}px;width:${width}px;height:${height}px;" ></div>
+</body>
+</html>
