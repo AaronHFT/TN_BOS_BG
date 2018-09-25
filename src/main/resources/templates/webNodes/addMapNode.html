@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>添加网点</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
+    <style type="text/css">
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:100%}
+        #addPanel{height:145px}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=IvICqCwbznFN0ORyFnYRpEGMi3cezZBK">
+        //v3.0版本的引用方式：src="http://api.map.baidu.com/api?v=3.0&ak=您的密钥"
+        //我的密匙为：IvICqCwbznFN0ORyFnYRpEGMi3cezZBK
+    </script>
+</head>
+
+<body>
+<div id="addPanel">
+    <form action="#" th:action="@{/mapNodes/add}">
+        <input type="hidden" name="webNodes_x" id="webNodes_x">
+        <input type="hidden" name="webNodes_y" id="webNodes_y">
+        <table class="table table-border table-bordered table-striped">
+            <tbody>
+            <tr class="text-c">
+                <td>网点名称:</td>
+                <td><input type="text" name="webNodes_name" class="input-text radius size-M"></td>
+                <td>网点座机:</td>
+                <td><input type="text" name="webNodes_tel" class="input-text radius size-M"></td>
+            </tr>
+            <tr class="text-c">
+                <td>网点负责人:</td>
+                <td><input type="text" name="webNodes_manager" class="input-text radius size-M"></td>
+                <td>负责人电话:</td>
+                <td><input type="text" name="webNodes_phone" class="input-text radius size-M"></td>
+            </tr>
+            <tr class="text-c">
+                <td>地址:</td>
+                <td><input type="text" name="webNodes_address" id="address" class="input-text radius size-M"></td>
+                <td colspan="2"><input type="submit"value="保存" class="btn btn-secondary radius"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<div id="container"></div>
+
+<!--Hui的导入包-->
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script>
+<script type="text/javascript">
+    // 创建地图实例
+    var map = new BMap.Map("container");
+    // 创建点坐标,
+    var point = new BMap.Point(114.324767, 30.612353);
+    // 初始化地图，设置中心点坐标和地图级别
+    map.centerAndZoom(point, 15);
+    // 创建交通流量图层实例
+    var traffic = new BMap.TrafficLayer();
+    // 将图层添加到地图上
+    map.addTileLayer(traffic);
+    //开启鼠标滚轮缩放
+    map.enableScrollWheelZoom(true);
+    //添加比例尺
+    map.addControl(new BMap.ScaleControl());
+    //添加缩略地图
+    map.addControl(new BMap.OverviewMapControl());
+    //添加地图类型
+    map.addControl(new BMap.MapTypeControl());
+    // 仅当设置城市信息时，MapTypeControl的切换功能才能可用
+    map.setCurrentCity("武汉");
+
+    //设置全球定位
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);
+            map.panTo(r.point);
+            var marker = new BMap.Marker(new BMap.Point(r.point.lng, r.point.lat));
+            map.addOverlay(marker);
+        }
+        else {
+            alert('failed'+this.getStatus());
+        }
+    });
+
+    //点击获取地址
+    var geoc = new BMap.Geocoder();
+    map.addEventListener("click", function(e){
+        var pt = e.point;
+        //获取经纬度
+        $("#webNodes_x").val(pt.lng);
+        $("#webNodes_y").val(pt.lat);
+        //清除地图上的所有标注
+        map.clearOverlays();
+        // 创建标注
+        var marker = new BMap.Marker(new BMap.Point(pt.lng, pt.lat));
+        map.addOverlay(marker);
+        // alert(pt.lng+","+pt.lat);
+        geoc.getLocation(pt, function(rs){
+            var addComp = rs.addressComponents;
+            var address=addComp.province  + addComp.city  + addComp.district  + addComp.street  + addComp.streetNumber;
+            $("#address").val(address);
+            // alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+        });
+    });
+
+    //添加城市切换控件
+    map.enableInertialDragging();
+
+    map.enableContinuousZoom();
+
+    var size = new BMap.Size(10, 20);
+    map.addControl(new BMap.CityListControl({
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        offset: size,
+        // 切换城市之间事件
+        // onChangeBefore: function(){
+        //    alert('before');
+        // },
+        // 切换城市之后事件
+        // onChangeAfter:function(){
+        //   alert('after');
+        // }
+    }));
+</script>
+</body>
+</html>
