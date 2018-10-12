@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.CarManageMapper">
+    <!--查询所有车辆-->
+<select id="carManage_show"  resultType="m">
+    SELECT 	* FROM `tn_bos`.`truck`
+</select>
+
+    <!--车辆类型查询-->
+<select id="carManage_sel" resultType="m" parameterType="m">
+     SELECT 	* FROM `tn_bos`.`truck` WHERE truck_type=#{truck_type}
+</select>
+
+    <!--车辆车牌查询-->
+    <select id="carManage_sel1" resultType="m" parameterType="m">
+     SELECT 	* FROM `tn_bos`.`truck` WHERE plate_number=#{plate_number}
+</select>
+
+    <!--车辆车牌查询-->
+    <select id="carManage_sel2" resultType="m" parameterType="m">
+     SELECT 	* FROM `tn_bos`.`truck` WHERE truckState=#{truckState}
+</select>
+
+<!--车辆删除-->
+    <delete id="carManage_del" parameterType="m">
+    DELETE FROM `tn_bos`.`truck` WHERE `truck_id` = #{truck_id} ;
+    </delete>
+
+    <!--车辆车牌查询-->
+    <select id="carManage_sel3" resultType="m" parameterType="m">
+     SELECT * FROM `tn_bos`.`truck` WHERE truck_id=#{truck_id}
+</select>
+    <!--添加车辆-->
+    <insert id="carManage_add2" parameterType="m">
+   INSERT INTO `tn_bos`.`truck` VALUES
+   (#{truck_id}, #{rid}, #{plate_number}, #{truck_type}, #{truck_load}, #{volumes}, #{truckState}, #{truckLength}, #{truckImage}, #{datetime})
+    </insert>
+
+</mapper>

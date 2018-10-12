@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.TransportMapper">
+    <!--查看所有驾驶员及附属信息-->
+<select id="drivershow" resultType="m">
+   SELECT DISTINCT * FROM
+(SELECT *
+FROM Portfolio a,pilot b
+WHERE a.Portfolio_pilotId=b.pilot_id and pilot_delTag=0) a
+LEFT JOIN illegal b
+ON a.pilot_id=b.illegal_pilotId
+</select>
+
+    <!--删除驾驶员-->
+    <update id="driverManage_del"   parameterType="m">
+UPDATE  pilot SET pilot_delTag=1
+WHERE pilot_id = #{pilot_id}
+    </update>
+
+    <!--添加驾驶员-->
+    <insert id="driverManage_add" parameterType="m">
+INSERT INTO `tn_bos`.`pilot` VALUES
+(NULL, #{pilot_name}, #{drivinglicence},12, #{privinglicenceimg}, 0);
+    </insert>
+
+    <!--查询驾驶员-->
+    <select id="driverManage_sel" resultType="m">
+        SELECT * FROM pilot ORDER BY pilot_id DESC LIMIT 0,1
+    </select>
+
+    <!--添加驾驶员业务-->
+    <insert id="driverManage_add1" parameterType="m">
+INSERT INTO `tn_bos`.`portfolio` VALUES(NULL,0, 7,#{pilot_id} );
+    </insert>
+</mapper>

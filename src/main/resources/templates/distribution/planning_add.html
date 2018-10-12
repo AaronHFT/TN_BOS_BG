@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#"/>
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        #l-map {
+            height: 300px;
+            width: 100%;
+        }
+
+        #r-result, #r-result table {
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=gNzyyyVVgseNwU31EXAttganmDLTjY64"></script>
+
+    <title>添加计划</title>
+</head>
+<body>
+<article class="page-container">
+    <form  method="post" class="form form-horizontal" id="form-member-add">
+<div class="row cl">
+    <label class="form-label col-xs-4 col-sm-3">运输的编号：</label>
+    <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+				<select id="order_id" name="order_id" class="select">
+                    <option>请选择</option>
+					<option th:each=" t:${pslist}" th:value="${t.order_id}">[[${t.order_id}]]</option>
+				</select>
+				</span>
+        <input  type="hidden" id="output1" name="output1" >
+        <input   type="hidden" id="output3" name="output3" >
+    </div>
+</div>
+    <div id="sys_role_id"></div>
+    <div id="l-map"></div>
+    <div id="r-result"></div>
+    <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
+    <script type="text/javascript">
+        // 百度地图API功能
+        var starting = $('#starting').text();
+        var downtown = $('#downtown').text();
+
+        var map = new BMap.Map("l-map");
+        map.centerAndZoom(new BMap.Point(116.404, 39.915), 12);
+        var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        driving.search(starting, downtown);
+    </script>
+<div class="row cl">
+    <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+        <input class="btn btn-primary radius" type="submit" onclick="transmit()" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+    </div>
+</div>
+</form>
+</article>
+<script type="text/javascript">
+    function transmit(){
+        $.post('/transport/planning_add2',{
+            order_id:$("#order_id").val(),
+            tspt_starting:$("#starting").text(),
+            tspt_downtown:$("#downtown").text(),
+            output1:$("#output1").val(),
+            output3:$("#output3").val()
+        },function(j){
+        },"JSON")
+        var index = parent.layer.getFrameIndex(window.name);//获取当前弹出层层级
+        window.parent.location.reload();//刷新父页面
+        parent.layer.close(index);//关闭弹出层
+    };
+</script>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script>
+    <!--/_footer 作为公共模版分离出去-->
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#order_id").change(function () {
+                var sys_role_id = "";
+                $.post("/transport/planning_sel2", {order_id: $('#order_id').val()}, function (j) {
+                    $.each(j, function (i, e) {
+                         if(e.goodReach_state==0){
+                            sys_role_id = '<span id="starting" >' + e.webNodes_address + '</span> <span id="downtown" >' + e.store_address + '</span>';
+                        }
+                         else{
+                           sys_role_id = '<span id="starting" >' + e.store_address + '</span> <span id="downtown" >' + e.webNodes_address + '</span>';
+                        }
+                    })
+                    $('#sys_role_id').html(sys_role_id);
+                }, "JSON")
+                // 百度地图API功能
+                var starting = $('#starting').text();
+                var downtown =$('#downtown').text();
+              var map = new BMap.Map("l-map");
+                var output = "从"+starting+"到"+downtown+"驾车需要";
+                var output1="";
+                var output2="总路程为 ";
+                var output3="";
+                var searchComplete = function (results){
+                    if (transit.getStatus() != BMAP_STATUS_SUCCESS){
+                        return ;
+                    }
+                    var plan = results.getPlan(0);
+                    output1 =  plan.getDuration(true) ;                //获取时间
+                    output3=  plan.getDistance(true)              //获取距离
+                }
+                var transit = new BMap.DrivingRoute(map, {renderOptions: {map: map},
+                    onSearchComplete: searchComplete,
+                    onPolylinesSet: function(){
+                        setTimeout(function(){
+                            alert(output+output1+output2+output3)
+                            $("#output1").val(output1);
+                            $("#output3").val(output3);
+                        },"1000");
+                    }});
+                transit.search(starting, downtown);
+
+                var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+              driving.search(starting, downtown);
+            })
+        })
+    </script>
+</body>
+</html>

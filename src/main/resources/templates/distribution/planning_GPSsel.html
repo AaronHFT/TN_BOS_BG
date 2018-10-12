@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#"/>
+    <style type="text/css">
+        body, html {width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+        #l-map{height:500px;width:100%;}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gNzyyyVVgseNwU31EXAttganmDLTjY64"></script>
+    <title>GPS</title>
+</head>
+<body>
+<input  type="hidden" th:value="${glist.webNodes_address}" id="webNodes_address">
+<input  type="hidden" th:value="${glist.store_address}" id="store_address">
+ <div id="allmap"></div>
+<div id="l-map"></div>
+<div id="r-result"></div>
+</body>
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
+<script type="text/javascript">
+    // 百度地图API功能
+    var starting=$('#webNodes_address').val();
+    var downtown=$('#store_address').val();
+
+    var map = new BMap.Map("l-map");
+    var point = new BMap.Point(114.31513, 30.582802);
+    map.centerAndZoom(point,12);
+    var myGeo = new BMap.Geocoder();
+     var myP1 = "";    //起点
+     var myP2 = "";    //终点
+    myGeo.getPoint(starting, function(point){
+        if (point) {
+         //   alert(starting+point.lng+','+point.lat);
+            myP1 = new BMap.Point(point.lng,point.lat);
+        }
+    }, "武汉");
+    myGeo.getPoint(downtown, function(point){
+        if (point) {
+          //  alert(downtown+point.lng+','+point.lat);
+            myP2 = new BMap.Point(point.lng,point.lat);
+        }
+    }, "武汉");
+    var myIcon = new BMap.Icon("/transport/img/car20.jpg", new BMap.Size(20, 20), {    //小车图片
+        imageOffset: new BMap.Size(0, 0)    //图片的偏移量。为了是图片底部中心对准坐标点。
+     });
+    var driving2 = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+    driving2.search(starting, downtown);//显示一条公交线路
+    window.run = function (){
+        var driving = new BMap.DrivingRoute(map);    //驾车实例
+        driving.search(starting, downtown);//显示一条公交线路
+        driving.setSearchCompleteCallback(function(){
+            var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+            var paths = pts.length;    //获得有几个点
+            var carMk = new BMap.Marker(pts[0],{icon:myIcon});
+             map.addOverlay(carMk);
+            i=0;
+            function resetMkPoint(i){
+                carMk.setPosition(pts[i]);
+                if(i < paths){
+                    setTimeout(function(){
+                        i++;
+                        resetMkPoint(i);
+                     },100);
+                 }
+             }
+           setTimeout(function(){
+                resetMkPoint(5);
+             },100)
+         });
+     }
+    setTimeout(function(){
+        run();
+    },1500);
+</script>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
+</html>

@@ -8,6 +8,9 @@
 	<settings>
 		<setting name="cacheEnabled" value="true" /><!-- 二级缓存开启 -->
 	</settings>
+	<typeAliases>
+		<typeAlias type="java.util.HashMap" alias="m"/>
+	</typeAliases>
 
 </configuration>
 

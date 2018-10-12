@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.PlanningMapper">
+
+    <!--查看所有计划-->
+    <select id="distrbution_show" resultType="m">
+        SELECT * FROM  `tn_bos`.`tarnsportation_plan` WHERE delTag=0
+    </select>
+
+    <!--删除计划-->
+    <update id="planning_del" parameterType="m">
+          UPDATE `tn_bos`.`tarnsportation_plan` SET delTag=1 WHERE tspt_id=#{tspt_id}
+    </update>
+
+
+    <!--查看所有运输计划-->
+    <select id="planning_sel" resultType="m">
+       SELECT * FROM `order` o,webnodes w,goodreach g,store s
+WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
+AND o.order_state='调度运输'
+    </select>
+
+    <!--查看所有运输的地址-->
+    <select id="planning" resultType="m">
+
+        SELECT * FROM `order` o,webnodes w,goodreach g,store s
+WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
+AND o.order_state='调度运输' AND o.order_id=#{order_id}
+
+    </select>
+
+
+    <!--查看所有计划-->
+    <select id="allocation" resultType="m">
+SELECT * FROM `order` o,webnodes w,goodreach g,store s
+WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
+AND o.order_state='调度运输'
+    </select>
+
+    <!--查看合适的车辆-->
+    <select id="planning_truck" resultType="m">
+        SELECT * FROM truck t WHERE truckState='空闲'
+    </select>
+
+    <!--查看合适的驾驶员-->
+    <select id="planning_pilot" resultType="m">
+        SELECT * FROM pilot WHERE pilot_delTag=0
+    </select>
+
+
+    <!--修改驾驶员-->
+    <update id="allocation_up1" parameterType="m">
+          UPDATE truck SET truckState='出车' WHERE truck_id=#{truck_id}
+    </update>
+
+    <!--修改车辆状态-->
+    <update id="allocation_up2" parameterType="m">
+          UPDATE pilot SET pilot_delTag=2 WHERE pilot_id=#{pilot_id}
+    </update>
+
+    <!--修改运输-->
+    <update id="allocation_up3" parameterType="m">
+        UPDATE `tn_bos`.`goodreach` SET
+	`truck_id` = #{truck_id},
+	`pilot_id` = #{pilot_id}
+	WHERE
+	`goodReach_id` = #{goodReach_id}
+    </update>
+
+    <!--添加计划-->
+    <insert id="planning_add2" parameterType="m">
+  INSERT INTO `tn_bos`.`tarnsportation_plan` VALUES
+	(NULL, #{tspt_date}, #{load_num}, '路运', #{tspt_starting}, #{tspt_downtown}, #{tspt_freight}, '运输中', #{order_id}, #{summileage}, 0);
+    </insert>
+
+
+
+    <!--查看运输的详情-->
+    <select id="distrbution_gps" resultType="m">
+        SELECT * FROM `order` o,webnodes w,goodreach g,store s,pilot p,truck t
+WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
+AND o.order_state='调度运输' AND t.truck_id=g.truck_id AND p.pilot_id=g.pilot_id
+    </select>
+
+
+    <!--查看运输的详情的出发地点到达地点-->
+    <select id="planning_GPSsel" resultType="m">
+        SELECT * FROM `order` o,webnodes w,goodreach g,store s,pilot p,truck t
+WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
+AND o.order_state='调度运输' AND t.truck_id=g.truck_id AND p.pilot_id=g.pilot_id AND o.order_id=#{order_id}
+    </select>
+
+    <!--修改运输状态-->
+    <update id="planning_up" parameterType="m">
+UPDATE `tn_bos`.`order`
+	SET
+	`order_state` = '调度运输完'
+	WHERE
+	`order_id` = #{order_id}
+    </update>
+
+
+    <!--查看所有运输计划-->
+    <select id="planning_sel5" resultType="m">
+       SELECT * FROM `order` o,webnodes w,goodreach g,store s
+WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
+AND o.order_state='调度运输' AND truck_id!="" AND pilot_id!=""
+    </select>
+</mapper>

@@ -2881,7 +2881,7 @@
         'base',
         'uploader',
         'file',
-        'lib/transport',
+        'lib/distrbution',
         'widgets/widget'
     ], function( Base, Uploader, WUFile, Transport ) {
     
@@ -4163,7 +4163,7 @@
         // flash
         'runtime/flash/filepicker',
         'runtime/flash/image',
-        'runtime/flash/transport'
+        'runtime/flash/distrbution'
     ], function( Base ) {
         return Base;
     });

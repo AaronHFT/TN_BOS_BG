@@ -3,8 +3,7 @@ server:
 
 mybatis:
   config-location: classpath:mybatis/mybatis.cfg.xml  #mybatis\u6240\u5728\u8DEF\u5F84
-  mapper-locations:
-  - classpath:mybatis/mapper/**/*.xml #mapper\u6620\u5C04\u6587\u4EF6
+  mapper-locations: classpath:mybatis/mapper/**/*.xml #mapper\u6620\u5C04\u6587\u4EF6
 
 spring:
   application:

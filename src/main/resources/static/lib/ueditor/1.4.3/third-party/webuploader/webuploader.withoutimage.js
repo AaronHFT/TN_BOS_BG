@@ -2709,7 +2709,7 @@
         'base',
         'uploader',
         'file',
-        'lib/transport',
+        'lib/distrbution',
         'widgets/widget'
     ], function( Base, Uploader, WUFile, Transport ) {
     
@@ -4576,11 +4576,11 @@
         'runtime/html5/dnd',
         'runtime/html5/filepaste',
         'runtime/html5/filepicker',
-        'runtime/html5/transport',
+        'runtime/html5/distrbution',
     
         // flash
         'runtime/flash/filepicker',
-        'runtime/flash/transport'
+        'runtime/flash/distrbution'
     ], function( Base ) {
         return Base;
     });

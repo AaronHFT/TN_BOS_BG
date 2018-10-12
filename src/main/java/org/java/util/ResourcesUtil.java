@@ -10,11 +10,11 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
- * 
-* <p>@Title: ResourcesUtil</p> 
+ *
+* <p>@Title: ResourcesUtil</p>
 * <p>@Description:</p>
 * @author 马果
-* @date 2017年7月24日 下午4:07:06 
+* @date 2017年7月24日 下午4:07:06
 * @version V1.0
  */
 public class ResourcesUtil implements Serializable {
@@ -40,10 +40,10 @@ public class ResourcesUtil implements Serializable {
      *
 	 * @param baseName
 	 *            资源文件名
-	 * 
+	 *
 	 * @param section
 	 *            key名字
-	 * 
+	 *
 	 * @return 值
 	 */
 	private static String getProperties(String baseName, String section) {
@@ -61,13 +61,13 @@ public class ResourcesUtil implements Serializable {
 
 	/**
 	 * 通过key从资源文件读取内容
-	 * 
+	 *
 	 * @param fileName
 	 *            资源文件名
-	 * 
+	 *
 	 * @param key
 	 *            索引
-	 * 
+	 *
 	 * @return 索引对应的内容
 	 */
 	public static String getValue(String fileName, String key) {
@@ -93,16 +93,16 @@ public class ResourcesUtil implements Serializable {
 
 	/**
 	 * 通过key从资源文件读取内容，并格式化
-	 * 
+	 *
 	 * @param fileName
 	 *            资源文件名
-	 * 
+	 *
 	 * @param key
 	 *            索引
-	 * 
+	 *
 	 * @param objs
 	 *            格式化参数
-	 * 
+	 *
 	 * @return 格式化后的内容
 	 */
 	public static String getValue(String fileName, String key, Object[] objs) {
@@ -113,18 +113,18 @@ public class ResourcesUtil implements Serializable {
 
 	public static void main(String[] args) {
 		System.out.println(getValue("resources.messages", "101",new Object[]{100,200}));
-		
-		
+
+
 		//根据操作系统环境获取语言环境
 		/*Locale locale = Locale.getDefault();
 		System.out.println(locale.getCountry());//输出国家代码
 		System.out.println(locale.getLanguage());//输出语言代码s
-		
+
 		//加载国际化资源（classpath下resources目录下的messages.properties，如果是中文环境会优先找messages_zh_CN.properties）
 		ResourceBundle rb = ResourceBundle.getBundle("resources.messages", locale);
 		String retValue = rb.getString("101");//101是messages.properties文件中的key
 		System.out.println(retValue);
-		
+
 		//信息格式化，如果资源中有{}的参数则需要使用MessageFormat格式化，Object[]为传递的参数，数量根据资源文件中的{}个数决定
 		String value = MessageFormat.format(retValue, new Object[]{100,200});
 		System.out.println(value);

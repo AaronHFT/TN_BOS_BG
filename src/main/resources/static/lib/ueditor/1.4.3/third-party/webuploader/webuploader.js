@@ -3075,7 +3075,7 @@
         'base',
         'uploader',
         'file',
-        'lib/transport',
+        'lib/distrbution',
         'widgets/widget'
     ], function( Base, Uploader, WUFile, Transport ) {
     
@@ -6715,12 +6715,12 @@
         'runtime/html5/imagemeta/exif',
         'runtime/html5/androidpatch',
         'runtime/html5/image',
-        'runtime/html5/transport',
+        'runtime/html5/distrbution',
     
         // flash
         'runtime/flash/filepicker',
         'runtime/flash/image',
-        'runtime/flash/transport'
+        'runtime/flash/distrbution'
     ], function( Base ) {
         return Base;
     });
