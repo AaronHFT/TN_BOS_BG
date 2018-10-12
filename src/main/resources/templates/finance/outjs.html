@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
+    <title>Title</title>
+</head>
+<body>
+<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+    <thead>
+    <tr class="text-c">
+        <td>工作单号</td>
+        <td>驾驶员姓名</td>
+        <td> 应付工资</td>
+        <td>是否结算</td>
+    </tr>
+    <tr class="text-c"  th:each=" f : ${session.outlist}" >
+        <td th:text="${f.driverid}"></td>
+        <td th:text="${f.pilot_name}"></td>
+        <td th:text="${f.spending}"></td>
+        <td><span><a  th:if="${f.ispayment} eq 0" th:href="@{outupd(id=${f.cid })}" >结账</a> <span  th:if="${f.ispayment} eq 1" >已结账</span>  </td>
+    </tr>
+    </thead>
+
+</body>
+</html>

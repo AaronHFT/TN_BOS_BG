@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.java.dao.outStoreMapper">
+<select id="orderAll" resultType="map">
+SELECT * , IFNULL((SELECT gc.goodChange_num-SUM(g.pickUpList_num) FROM pickuplist g WHERE gc.good_line=g.good_code ),gc.goodChange_num) 'outnum'
+FROM goodChange gc,customer c,good gd
+WHERE gc.state=0 AND gc.client_id=c.cus_id AND gc.goodChange_goodId=gd.good_id
+</select>
+    <insert id="insgoodsent" parameterType="map">
+        INSERT goodreach VALUES(0,#{goodReach_code},#{order_id},'0',0,#{goodReach_goodName},
+        #{goodReach_goodCode},#{goodReach_standard},#{goodReach_level},#{goodReach_ExceptNum},#{goodReach_producedDate},
+        #{goodReach_secureDate},#{goodReach_weight},#{goodReach_volume},#{goodReach_unit},1);
+    </insert>
+    <select id="goodsentAll" resultType="map">
+SELECT * ,(SELECT COUNT(*) FROM goodchange g WHERE g.goodChange_id=go.goodReach_id) 'num'
+FROM goodReach go,customer c,`order` o
+WHERE go.order_id=o.order_id AND o.cus_id=c.cus_id
+    </select>
+    <insert id="insgoodchange" parameterType="map">
+        INSERT goodchange VALUES(UUID(),'1','0',0,#{order_id},#{client_id},SYSDATE(),#{goodChange_producedDate},#{goodChange_secureDate},#{goodChange_num},#{goodChange_unit},#{goodChange_weight},#{goodChange_volume},#{goodChange_lv},1,#{goodChange_goodId},#{good_line},1,3);
+    </insert>
+    <insert id="insgoodchange2" parameterType="map">
+        INSERT goodchange VALUES(UUID(),'1','0',0,'0','0',SYSDATE(),'2011-01-01','2011-01-01','1','1','1','1','0',1,(SELECT gd.good_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id}),'0',1,3);
+    </insert>
+    <select id="goodchangeAll" resultType="map">
+SELECT * ,(SELECT COUNT(*) FROM pickUpList p WHERE p.goodSendOut_id=gc.goodChange_Code) 'num'
+FROM goodchange gc,customer c
+WHERE c.cus_id=gc.client_id
+    </select>
+<insert id="pickUpListins" parameterType="map">
+    INSERT pickUpList VALUES(UUID(),#{goodSendOut_id},#{good_code },#{pickUpList_num},#{pickUpList_weight},#{pickUpList_volume},SYSDATE());
+</insert>
+    <select id="pickUpListAll" resultType="map">
+SELECT *
+FROM pickUpList
+    </select>
+    <select id="goodreachAll" resultType="map">
+    SELECT *,(SELECT COUNT(*) FROM pickuplist pl WHERE pl.goodSendOut_id=gr.goodReach_id ) 'num'
+FROM goodreach gr,good gd,`order` o,customer c
+WHERE gr.goodReach_goodCode=gd.good_code AND gr.order_id=o.order_id AND o.cus_id=c.cus_id
+    </select>
+    <select id="goodChange1" parameterType="map" resultType="map">
+        SELECT *,(SELECT r.order_id FROM goodReach r WHERE r.goodReach_id=#{id} ) "orderid",
+        (SELECT ct.cus_id FROM goodReach r,`order` o,customer ct WHERE r.goodReach_id=#{id} AND r.order_id=o.order_id AND o.cus_id=ct.cus_id) "cusid",
+           IF(gc6.b="shdck",IF(gc6.c&lt;=gc6.goodChange_num,gc6.c,gc6.goodChange_num) ,gc6.c-gc6.b) "sl"
+        FROM (
+        SELECT *,(SELECT IF(SUM(gc5.goodChange_num)-1 &lt;= gc3.num,gc3.num-SUM(gc5.goodChange_num)+1,"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId ) "c",
+        (SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,IF((SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))-1&lt;=gc3.num,gc3.num-(SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))+1,'shdck'),'yck') 'v' FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId ) 'b'
+        FROM (SELECT *,(SELECT SUM(gc.goodChange_num)
+        FROM goodchange gc
+        WHERE gc.state=0 AND gc.goodChange_inTime&lt;=gc2.goodChange_inTime AND gc2.goodChange_goodId=gc.goodChange_goodId
+        ORDER BY gc.goodChange_inTime) "num"
+        FROM goodchange gc2,good gd
+        WHERE  gc2.state=0 AND gd.good_id=gc2.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} )
+        ORDER BY gc2.goodChange_inTime) gc3) gc6 ,good gd
+        WHERE gd.good_id=gc6.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} ) AND gc6.goodChange_inTime&lt;=
+        (SELECT gc6.goodChange_inTime
+        FROM (
+        SELECT *,(SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,gc3.num-SUM(gc5.goodChange_num)+1,"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId ) "c",
+        (SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,IF((SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))-1&lt;=gc3.num,gc3.num-(SUM(gc5.goodChange_num)
+        +(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))+1,"shdck"),"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId  ) "b"
+        FROM (SELECT *,(SELECT SUM(gc.goodChange_num)
+        FROM goodchange gc
+        WHERE gc.state=0 AND gc.goodChange_inTime&lt;=gc2.goodChange_inTime AND gc2.goodChange_goodId=gc.goodChange_goodId
+        ORDER BY gc.goodChange_inTime) "num"
+        FROM goodchange gc2,good gd
+        WHERE gc2.state=0 AND gd.good_id=gc2.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} )
+        ORDER BY gc2.goodChange_inTime) gc3) gc6
+        WHERE  gc6.b !="shdck" AND gc6.c!="yck"
+        LIMIT 0,1) AND gc6.c!="yck"
+    </select>
+    <select id="goodchange2All" parameterType="map" resultType="map">
+ SELECT *
+FROM goodchange
+WHERE goodChange_goodId=(SELECT gd.good_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id}) and state=1
+    </select>
+    <update id="goodupd" parameterType="map">
+    UPDATE good
+SET good_num=good_num-#{num}
+WHERE good_code=(SELECT goodReach_goodCode FROM goodreach WHERE goodReach_id=#{id})
+    </update>
+</mapper>
