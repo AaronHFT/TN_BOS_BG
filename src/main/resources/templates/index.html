@@ -46,10 +46,13 @@
 <aside class="Hui-aside">
     <div class="menu_dropdown bk_2">
         <dl>
-            <dt><i class="Hui-iconfont">&#xe616;</i> 总务管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe616;</i> 客户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a data-href="${pageContext.request.contextPath }/general/findAllMeeting.do" data-title="会议申请" href="javascript:void(0)">会议申请</a></li>
+                    <li><a th:data-href="@{/customer/showAll}" data-title="客户列表" href="javascript:void(0)">客户列表</a></li>
+                    <li><a th:data-href="@{/order/showAll}" data-title="客户订单" href="javascript:void(0)">客户订单</a></li>
+                    <li><a th:data-href="@{/contract/showAll}" data-title="客户订单" href="javascript:void(0)">合同管理</a></li>
+
                 </ul>
             </dd>
         </dl>

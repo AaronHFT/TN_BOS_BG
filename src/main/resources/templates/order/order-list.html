@@ -1,0 +1,177 @@
+﻿<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<![endif]-->
+	<link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#" />
+	<link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#" />
+	<link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
+	<link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
+	<link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
+<!--[if IE 6]>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>订单列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 客户管理 <span class="c-gray en">&gt;</span> 订单列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		</span>
+		<span class="r">共有数据：<strong th:text="${ordListSize}"></strong> 条</span> </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<th width="25"><input type="checkbox" name="" value=""></th>
+					<th width="40">序号</th>
+					<th width="150">订单编号</th>
+					<th width="90">客户名称</th>
+					<th width="150">订单类型</th>
+					<th width="100">下单时间</th>
+					<th width="100">网点名称</th>
+					<th width="100">订单状态</th>
+					<th width="100">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c" th:each="o,i:${ordList}">
+					<td ><input type="checkbox" value="" name=""></td>
+					<td th:text="${i.count}"></td>
+					<td th:text="${o.order_id}"></td>
+					<td th:text="${o.cus_name}"></td>
+					<td th:text="${o.orderType_name}"></td>
+					<td th:text="${o.order_time}"></td>
+					<td th:text="${o.webNodes_name}"></td>
+					<td th:text="${o.order_state}"></td>
+					<td class="td-manage">
+						<input class="btn btn-primary radius size-MINI" type="button"  th:if="${o.order_state == '合同签订中' && o.cont_count == 0}" th:onclick="'modaldemo(\''+${o.order_id}+'\')'" value="新建合同">
+						<span class="label label-danger radius"  th:if="${o.order_state == '合同签订中' && o.cont_count == 1}">待签订</span>
+						<input class="btn btn-success radius size-MINI" type="button" th:if="${o.order_state == '处理订单'}" th:onclick="'distribution(\''+${o.order_id}+'\',\''+${o.order_province}+'\')'" value="分配订单">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!--新建合同-->
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">新建合同</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<p> 合同价格: <input type="number" class="input-text size-M" id="cont_price"> </p>
+				<p>
+					合同类型:
+					<span class="select-box">
+					<select name class="select" id="conttype_id">
+						<option th:each="c:${allCont}" th:text="${c.contT_name}" th:value="${c.contT_id}"></option>
+					</select>
+				</span>
+				</p>
+				<input type="hidden" id="oid">
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" onclick="createContract()">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--分配仓库-->
+<div id="store" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">分配仓库</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<p>
+					可选仓库:
+					<span class="select-box">
+					<select name class="select" id="store_id">
+					</select>
+				</span>
+					<input type="hidden" id="s_oid">
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" onclick="saveStore()">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
+<script type="text/javascript">
+$('.table-sort').dataTable({
+	"bStateSave": true,//状态保存
+	"pading":false,
+	"aoColumnDefs": [
+	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	  {"orderable":false,"aTargets":[0,8]}// 不参与排序的列
+	]
+});
+
+//分配仓库
+function saveStore(){
+    $.post('/order/saveStore',{"s_oid":$('#s_oid').val(),"store_id":$('#store_id').val()},function(){
+        location.href="/order/showAll";
+    $("#modal-demo").modal("hide");
+	});
+}
+
+//加载可选仓库
+function distribution(id,province){
+    $('#s_oid').val(id);
+	$.post("/order/distributionLoad",{"province":province},function(data){
+	    var str = "";
+	    $.each(data,function(i,obj){
+            var option = '<option value="'+obj.store_id+'">'+obj.store_address+'</option>';
+	        str += option;
+		})
+		$('#store_id').html(str);
+        $('#store').modal("show");
+	})
+}
+
+/*弹出层*/
+function modaldemo(id){
+    $('#oid').val(id);
+    $("#modal-demo").modal("show");
+}
+
+function createContract(){
+    console.log($('#oid').val());
+    console.log($('#cont_price').val());
+    console.log($('#conttype_id').val());
+    $.post('/contract/createContract',{'oid':$('#oid').val(),'cont_price':$('#cont_price').val(),'conttype_id':$('#conttype_id').val()},function(){
+		location.href="/order/showAll";
+	});
+    $("#modal-demo").modal("hide");
+}
+
+</script> 
+</body>
+</html>

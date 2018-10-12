@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.order.dao.OrderMapper">
+    <select id="showAllOrder" resultType="map">
+SELECT o.order_id,c.cus_name,t.orderType_name,o.order_time, w.webNodes_name,o.order_state,(SELECT COUNT(*) FROM contract con WHERE o.order_id = con.order_id ) cont_count,o.order_province
+FROM `order` o,customer c,ordertype t,webnodes w
+WHERE o.cus_id = c.cus_id
+AND o.orderType_id = t.orderType_id
+AND w.webNodes_id = o.webnodes_id
+    </select>
+
+    <update id="updOrderState" parameterType="map">
+       UPDATE `tn_bos`.`order`
+	SET
+	`order_state` = '处理订单'
+	WHERE
+	`order_id` = #{oid} ;
+    </update>
+
+    <select id="store_load" parameterType="map" resultType="map">
+        SELECT store_id,store_address FROM store WHERE store_address LIKE '%${province}%';
+    </select>
+
+    <update id="saveStore" parameterType="map">
+        UPDATE `tn_bos`.`order`
+	SET
+	`order_state` = '调度运输',
+	`store_id` = #{store_id}
+	WHERE
+	`order_id` = #{s_oid} ;
+    </update>
+</mapper>

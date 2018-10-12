@@ -23,4 +23,5 @@ public class IndexController {
     public String test1(){
         return "/login";
     }
+
 }

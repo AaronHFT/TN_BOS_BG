@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.contract.dao.ContractMapper">
+
+    <select id="showAllContract" resultType="map">
+        SELECT c.cont_id,t.contT_name,o.order_id,cus.cus_name,c.cont_price,c.cont_state
+        FROM contract c,`order` o,customer cus,contracttype t
+        WHERE o.order_id = c.order_id
+        AND cus.cus_id = o.cus_id
+        AND c.conttype_id = t.contT_id
+    </select>
+
+    <insert id="createContract" parameterType="map">
+          INSERT INTO contract VALUES(null,#{conttype_id},#{cont_price},#{oid},'待签订');
+    </insert>
+
+    <delete id="delContById" parameterType="map">
+        delete from contract where cont_id = #{delId};
+    </delete>
+
+    <select id="getAllContType" resultType="map">
+        select *  from contracttype;
+    </select>
+
+    <update id="saveContract" parameterType="map">
+        UPDATE `tn_bos`.`contract`
+	SET
+	`conttype_id` = #{contT_id},
+	`cont_price` = #{cont_price}
+	WHERE
+	`cont_id` = #{cont_id};
+    </update>
+
+    <update id="updContState" parameterType="map">
+        UPDATE `tn_bos`.`contract`
+	SET
+	`cont_state` = '已签订'
+	WHERE
+	`cont_id` = #{cid} ;
+    </update>
+</mapper>
