@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.java.dao.financeMapper">
+
+    <select  id="onefinance" resultType="map" parameterType="map">
+	SELECT b.rkf, b.ccf ,b.rkf+b.ccf "zfy" FROM (
+SELECT s1.goodChange_Code "rkdh",s2.goodChange_Code "ckdh",s1.cus_name "khxm",s1.cus_id "khbh",
+s2.goodChange_num*(SELECT bg.money FROM billingtype bg  WHERE y2.storageid=bg.btypeid)*CASE y2.storageid WHEN 1 THEN s2.goodChange_weight
+  WHEN 2 THEN s2.goodChange_volume
+   END "rkf",
+  DATEDIFF(s2.goodChange_inTime,s1.goodChange_inTime)*(SELECT bg.money FROM billingtype bg  WHERE y2.storageid=bg.btypeid)*s1.goodChange_num  "ccf"
+FROM
+(SELECT *
+FROM goodChange di,customer ct
+WHERE di.client_id=ct.cus_id AND di.state=0
+  ) s1,
+ (SELECT *
+FROM goodChange di,customer ct
+WHERE di.client_id=ct.cus_id AND di.state=1
+  ) s2,
+ (SELECT *
+  FROM  countmenty cm
+)y2
+WHERE y2.carriagebid=s1.goodChange_Code AND y2.comebankbid=s2.goodChange_Code and y2.comebankbid=#{id}
+) b
+	</select>
+
+    <select id="getAll" resultType="map">
+SELECT *,rkf+ckf+yf AS 'zfy'
+FROM jf
+    </select>
+
+    <update id="upd" parameterType="map">
+        UPDATE countmenty
+SET ispayment=1
+WHERE id=#{id}
+    </update>
+
+    <select id="outAll" resultType="map">
+    SELECT *
+    FROM chargeOff co, car_schedule_details cd,pilot pt
+    WHERE cd.driverid=pt.pilot_id AND co.driverid=cd.Schedule_details_id
+    </select>
+
+    <update id="outupd" parameterType="map">
+UPDATE  chargeOff
+SET ispayment=1
+WHERE id=#{id}
+   </update>
+
+</mapper>

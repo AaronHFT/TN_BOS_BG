@@ -56,44 +56,23 @@
                 </ul>
             </dd>
         </dl>
-            <dl>
-                <dt><i class="Hui-iconfont">&#xe616;</i> 资源管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-                <dd>
-                    <ul>
-                        <li><a data-href="${pageContext.request.contextPath }/Products/NewFile.do" data-title="新增用品" href="javascript:void(0)">新增用品</a></li>
-                    </ul>
-                </dd>
-            </dl>
         <dl>
-            <dt><i class="Hui-iconfont">&#xe616;</i>邮件管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe616;</i> 出库管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a data-href="${pageContext.request.contextPath }/background/mail/sendEmail.jsp" data-title="写邮件" href="javascript:void(0)">写邮件</a></li>
-                </ul>
-            </dd>
-        </dl>
-            <dl>
-                <dt><i class="Hui-iconfont">&#xe616;</i> 人事管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-                <dd>
-                    <ul>
-                        <li><a data-href="${pageContext.request.contextPath }/personnel/departmentshow.do" data-title="部门管理"  href="javascript:void(0)">部门管理</a></li>
-                        <li><a data-href="${pageContext.request.contextPath }/personnel/clerkshow.do" data-title="职员管理"  href="javascript:void(0)">职员管理</a></li>
-                    </ul>
-                </dd>
-            </dl>
-        <dl>
-            <dt><i class="Hui-iconfont">&#xe616;</i> 文档管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-            <dd>
-                <ul>
-                    <li><a data-href="${pageContext.request.contextPath }/document/showdocument.do" data-title="文件管理"  href="javascript:void(0)">文件管理</a></li>
+                    <li><a data-href="#" th:data-href="@{/outStore/orderAll}" data-title="创建发货通知单" href="javascript:void(0)">创建发货通知单</a></li>
+                    <li><a data-href="#" th:data-href="@{/outStore/goodsentAll}" data-title="创建计划出库表" href="javascript:void(0)">创建计划出库表</a></li>
+                    <li><a data-href="#" th:data-href="@{/outStore/goodchangAll}" data-title="捡货清单打印" href="javascript:void(0)">捡货清单打印</a></li>
+                    <li><a data-href="#" th:data-href="@{/outStore/pickUpListAll}" data-title="操作人员捡货" href="javascript:void(0)">操作人员捡货</a></li>
                 </ul>
             </dd>
         </dl>
         <dl>
-            <dt><i class="Hui-iconfont">&#xe616;</i> 考勤管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe616;</i> 财务管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="员工签到退到" href="javascript:void(0)">员工签到退到</a></li>
+                    <li><a th:data-href="@{finance/wjs}"  data-title="客户收款" href="javascript:void(0)">客户收款</a></li>
+                    <li><a th:data-href="@{finance/outjs}"  data-title="承运人付款" href="javascript:void(0)">承运人付款</a></li>
                 </ul>
             </dd>
         </dl>

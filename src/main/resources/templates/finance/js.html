@@ -6,47 +6,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#" />
     <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
-
-    <title>历史实例管理</title>
+    <title>Title</title>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>历史实例管理 <span class="c-gray en">&gt;</span>历史流程实例列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
-<div>
-    <div>
-        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
-            <thead>
-            <tr class="text-c">
-                <th width="25"><input type="checkbox" name="" value=""></th>
-                <th width="120">流程实例ID</th>
-                <th width="120">流程定义ID</th>
-                <th width="120">开始运行时间</th>
-                <th width="120">运行结束时间</th>
-                <th width="120">运行总时间</th>
-                <th width="120">实例发起人</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr class="text-c" th:each=" i:${instancelist}">
-                    <td><input type="checkbox" value="" name=""></td>
-                    <td th:text="${i.id }"></td>
-                    <td th:text="${i.processDefinitionId }"></td>
-                    <td th:text="${i.startTime }"></td>
-                    <td th:text="${i.endTime }"></td>
-                    <td th:text="${i.durationInMillis }"></td>
-                    <td th:text="${i.startUserId }"></td>
-                </tr>
-            </tbody>
-        </table>
+<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+    <thead>
+    <tr class="text-c" >
+        <td>客户姓名</td>
+        <td>入库费</td>
+        <td>存储费</td>
+        <td>运输费</td>
+        <td>总计</td>
+        <td>是否结账</td>
+    </tr>
+    </thead>
+    <tr class="text-c"  th:each=" f : ${session.flist}" >
+        <td th:text="${f.khxm}"></td>
+        <td th:text="${f.rkf}"></td>
+        <td th:text="${f.ckf}"></td>
+        <td th:text="${f.yf}"></td>
+        <td th:text="${f.zfy}"></td>
+        <td>[[${f.sfjz}]]<span><a id="bbb" th:bbb="${f.zfy}" th:ccc="${f.id}" th:if="${f.sfjz} eq '未结账'" >结账</a>     </span></td>
+    </tr>
+</table>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content radius">
+            <div class="modal-header">
+                <h3 class="modal-title" id="title">对话框标题</h3>
+                <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="" id="img" /><br>
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn btn-primary">确定</button>
+                <button class="btn" data-dismiss="modal" onclick="gb()" aria-hidden="true">关闭</button>
+            </div>
+        </div>
     </div>
 </div>
-
-
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
 <script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
@@ -58,6 +63,11 @@
 <script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
 <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
 <script type="text/javascript">
+    $(function(){
+
+
+        $("#bbb").click(sum_menty)
+    })
     $('.table-sort').dataTable({
         "bStateSave": true,//状态保存
         "aLengthMenu":[1,2,3,4,5,10,20],//可自行选择 每页显示条数
@@ -84,6 +94,27 @@
             }
         }
     });
+    /*总费用*/
+    function sum_menty(){
+        var vv=$(this).attr("ccc");
+        $.post("ajaxid",{"ajaxid":vv},function(res){
+            alert(res)
+        })
+        var v=$(this).attr("bbb")
+        $("#title").text("请付"+v+"元")
+        zf()
+        modaldemo()
+    }
+    /*关闭*/
+    function gb() {
+   window.location.href="/finance/wjs";
+    }
+    /*显示支付二维码*/
+    function zf(){
+        $.post("http://120.78.142.80/myPay/appid_create_order",{"payTo":"AliPay","appId":"XVCNcCNrVgX57D74FE80E77F50AE8383","playerId":"sVCNeCNuVTsF809995DA27B6B7B3D7D5","goodsId":"001" },function(res){
+            alert(res.msg)
+            $("#img").prop("src","http://qr.liantu.com/api.php?w=460&text="+res.orderInfo.qrcodeURL)
+        },"JSON")}
 
     /*资讯-添加*/
     function article_add(title,url,w,h){
@@ -97,6 +128,9 @@
     /*资讯-编辑*/
     function article_edit(title,url,id,w,h){
         layer_show(title,url,w,h);
+    }
+    function modaldemo(){
+        $("#modal-demo").modal("show")
     }
 
 
