@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
+    <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
+
+    <title>查询库存</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>货物管理 <span class="c-gray en">&gt;</span>退货订单 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div>
+    <div>
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+            <thead>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" name="good" value=""></th>
+                <th width="120">退货订单</th>
+                <th width="120">货物名称</th>
+                <th width="120">货物代码</th>
+                <th width="120">规格</th>
+                <th width="120">退货数量</th>
+                <th width="120">单位</th>
+                <th width="120">货物重量</th>
+                <th width="120">货物体积</th>
+                <th width="120">收货网点</th>
+                <th width="120">网点负责人</th>
+                <th width="120">联系电话</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c" th:each=" t:${list}">
+                <td><input type="checkbox" value="" name="good" th:value="${t.returnHistory_id }"></td>
+                <td th:text="${t.returnHistory_orderId }"></td>
+                <td th:text="${t.returnHistory_goodName }"></td>
+                <td th:text="${t.returnHistory_goodCode }"></td>
+                <td th:text="${t.returnHistory_standard }"></td>
+                <td th:text="${t.returnHistory_Num }"></td>
+                <td th:text="${t.returnHistory_weight }"></td>
+                <td th:text="${t.returnHistory_volume }"></td>
+                <td th:text="${t.returnHistory_unit }"></td>
+                <td th:text="${t.webNodes_address }"></td>
+                <td th:text="${t.webNodes_manager }"></td>
+                <td th:text="${t.webNodes_phone }"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script><!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
+<script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
+<script type="text/javascript">
+
+    $('.table-sort').dataTable({
+        "bStateSave": true,//状态保存
+        "aLengthMenu":[1,2,3,4,5,10,20],//可自行选择 每页显示条数
+        "pading":false,
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,6]}// 不参与排序的列
+        ],
+        "oLanguage" : { // 国际化配置
+            "sProcessing" : "正在获取数据，请稍后...",
+            "sLengthMenu" : "显示 _MENU_ 条",
+            "sZeroRecords" : "没有找到数据",
+            "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+            "sInfoEmpty" : "记录数为0",
+            "sInfoFiltered" : "(全部记录数 _MAX_ 条)",
+            "sInfoPostFix" : "",
+            "sSearch" : "关键字查询",
+            "sUrl" : "",
+            "oPaginate" : {
+                "sFirst" : "第一页",
+                "sPrevious" : "上一页",
+                "sNext" : "下一页",
+                "sLast" : "最后一页"
+            }
+        }
+    });
+
+    /*资讯-添加*/
+    function article_add(title,url,w,h){
+        var index = layer.open({
+            type: 2,
+            title: title,
+            content: url
+        });
+        layer.full(index);
+    }
+    /*资讯-编辑*/
+    function article_edit(title,url,id,w,h){
+        layer_show(title,url,w,h);
+    }
+
+
+</script>
+</body>
+</html>

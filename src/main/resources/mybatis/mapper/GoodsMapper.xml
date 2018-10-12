@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.GoodsMapper">
+
+    <!--查询全部收货单-->
+    <select id="findAllGoodAccept" resultType="java.util.HashMap">
+        select * from goodAccept
+    </select>
+
+    <!--查询库存-->
+    <select id="findAllGood" resultType="java.util.HashMap">
+        select *
+        from good a,store_position b
+        where a.store_position_id=b.store_position_id
+    </select>
+
+    <!--产品等级转换-->
+    <update id="lvChange" parameterType="java.util.HashMap">
+        update good
+        set good_level=#{goodLv}
+        where good_id=#{goodId}
+    </update>
+
+    <!--查询库存明细-->
+    <select id="findGoodsDetail" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+      SELECT *,a.goodChange_num - IFNULL((SELECT SUM(goodChange_num) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS num,a.goodChange_weight - IFNULL((SELECT SUM(goodChange_weight) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS weight,a.goodChange_volume - IFNULL((SELECT SUM(goodChange_volume) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS volume
+FROM goodChange a,good
+WHERE state=0
+      AND (a.goodChange_num - (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line)>0 OR (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line) IS NULL)
+      AND a.goodChange_goodId=good.good_id
+      AND a.goodChange_goodId=1;
+
+    </select>
+
+    <!--根据条形码查询货物的来龙去脉-->
+    <select id="goodLine" resultType="java.util.HashMap">
+SELECT *
+FROM
+(SELECT good_line,o.order_id sendOrderId,order_time sendTime,webNodes_address sendAddress,goodChange_inTime storeTime,goodChange_num storeNum,goodChange_unit storeUnit,goodChange_weight storeW,goodChange_volume storeV,store_address
+FROM goodChange gc,`order` o,webNodes w,store_position s1,store_region s2,store s3
+WHERE state=0
+  AND gc.Order_id=o.order_id
+  AND w.webNodes_id=o.webnodes_id
+  AND s1.store_region_id=s2.store_region_id
+  AND s2.store_id=s3.store_id) a
+LEFT JOIN
+(SELECT good_line,o1.order_id getOrderId,goodChange_inTime getTime,webNodes_address getAddress,goodChange_num getNum,goodChange_unit getUnit,goodChange_weight getW,goodChange_volume getV
+FROM goodChange gc1,`order` o1,webNodes w1
+WHERE state = 1
+  AND gc1.Order_id=o1.order_id
+  AND w1.webNodes_id=o1.webnodes_id) b
+ON a.good_line=b.good_line
+    </select>
+
+    <!--根据条形码查找货物批次详情-->
+    <select id="findGoodsDetailByInCode" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+      SELECT *,a.goodChange_num - IFNULL((SELECT SUM(goodChange_num) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS num,a.goodChange_weight - IFNULL((SELECT SUM(goodChange_weight) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS weight,a.goodChange_volume - IFNULL((SELECT SUM(goodChange_volume) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS volume
+FROM goodChange a,good
+WHERE state=0
+      AND (a.goodChange_num - (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line)>0 OR (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line) IS NULL)
+      AND a.goodChange_goodId=good.good_id
+      AND a.goodChange_goodId=#{goodId}
+      AND a.good_line=#{goodLine};
+    </select>
+
+    <!--报废出库-->
+    <insert id="uselessOut" parameterType="java.util.HashMap">
+        INSERT INTO goodChange VALUES(#{uselessOutCode},#{good_line},'',#{store_position_id},#{good_id},'','0','',#{client_id},#{ueslessDate},#{goodChange_producedDate},#{goodChange_secureDate},#{num},#{good_unit},#{weight},#{volume},#{good_level},'11','1');
+    </insert>
+    
+    <!--库存数量修改-->
+    <update id="updateGoods" parameterType="java.util.HashMap">
+        UPDATE good
+        SET good_num=#{afterNum},good_weight=#{afterWeight},good_volume=#{afterVolume}
+        WHERE good_id=#{goodId}
+    </update>
+
+    <!--查询需要退货的所有货品-->
+    <select id="findGoodsForReturn" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT *
+        FROM goodAccept g
+        WHERE goodAccept_destroyNum - goodAccept_handleNum > 0
+    </select>
+
+    <!--根据订单号查询需要退货的货品-->
+    <select id="findGoodsForReturnByOrderId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT *
+        FROM goodAccept g,`order` o
+        WHERE goodAccept_destroyNum - goodAccept_handleNum > 0
+          AND g.order_id=#{orderId}
+          AND o.order_id=g.order_id
+    </select>
+
+    <!--创建退货订单-->
+    <insert id="createReturnOrder" parameterType="java.util.HashMap">
+        INSERT INTO `order` VALUES(#{returnOrderId},#{client_id},'9',#{returnDate},#{con_id},#{webnodes_id},'暂无',#{store_id},'暂无');
+    </insert>
+
+    <!--添加退货历史记录-->
+    <insert id="createReturnHistoryForBad" parameterType="java.util.HashMap">
+        insert into returnHistory values(0,#{returnOrderId},#{goodAccept_goodName},#{goodAccept_goodCode},#{goodAccept_standard},#{goodAccept_level},#{goodAccept_destroyNum},#{goodAccept_producedDate},#{goodAccept_secureDate},#{weight},#{volume},#{goodAccept_unit});
+    </insert>
+
+    <!--退货后修改收货单-->
+    <update id="updateGoodAcceptAfterReturn" parameterType="java.util.HashMap">
+        update goodAccept
+        set goodAccept_handleNum=#{goodAccept_destroyNum}
+        where order_id=#{orderId}
+    </update>
+
+    <!--查询退货订单-->
+    <select id="findAllReturnOrder" resultType="java.util.HashMap">
+        select *
+        from `order` o,returnHistory r,webNodes w
+        where o.order_id=r.returnHistory_orderId
+        and w.webNodes_id=o.webNodes_id
+    </select>
+</mapper>
