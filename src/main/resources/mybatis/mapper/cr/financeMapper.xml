@@ -30,7 +30,7 @@ FROM jf
     </select>
     <update id="upd" parameterType="map">
         UPDATE countmenty
-SET ispayment=1
+SET ispayment="已结账"
 WHERE id=#{id}
     </update>
     <select id="outAll" resultType="map">
@@ -40,7 +40,7 @@ WHERE id=#{id}
     </select>
     <update id="outupd" parameterType="map">
 UPDATE  chargeOff
-SET ispayment="已结算"
+SET ispayment=1
 WHERE id=#{id}
    </update>
 <select id="rkf" parameterType="map" resultType="map">
