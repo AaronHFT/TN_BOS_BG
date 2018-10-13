@@ -212,7 +212,7 @@ public class ProcessController {
 
         System.out.println(activityId + ">>>>");
 
-        // 通过ProcessDefinitionEntity查询活动节点 ActivityImpl(每一个任务对应的矩形框 )
+        // 通过ProcessDefinitionEntity查询活动节点 ActivityImpl(每一个任务对应的矩形框)
         // 找到对应的矩形框
         ActivityImpl act = pdEntity.findActivity(activityId);
 
@@ -257,4 +257,10 @@ public class ProcessController {
 
         return "/flow/hisProcessInstance";
     }
+
+    @RequestMapping("goDeployee")
+    public String goDeployee(){
+        return "/flow/deployeeProcess";
+    }
+
 }
