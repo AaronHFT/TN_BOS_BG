@@ -20,7 +20,7 @@ WHERE go.order_id=o.order_id AND o.cus_id=c.cus_id
         INSERT goodchange VALUES(UUID(),'1','0',0,#{order_id},#{client_id},SYSDATE(),#{goodChange_producedDate},#{goodChange_secureDate},#{goodChange_num},#{goodChange_unit},#{goodChange_weight},#{goodChange_volume},#{goodChange_lv},1,#{goodChange_goodId},#{good_line},1,3);
     </insert>
     <insert id="insgoodchange2" parameterType="map">
-        INSERT goodchange VALUES(UUID(),'1','0',0,'0','0',SYSDATE(),'2011-01-01','2011-01-01','1','1','1','1','0',1,(SELECT gd.good_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id}),'0',1,3);
+        INSERT goodchange VALUES(UUID(),'1','0',0,(SELECT gr.order_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id}),'0',SYSDATE(),'2011-01-01','2011-01-01','1','1','1','1','0',1,(SELECT gd.good_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id}),'0',1,3);
     </insert>
     <select id="goodchangeAll" resultType="map">
 SELECT * ,(SELECT COUNT(*) FROM pickUpList p WHERE p.goodSendOut_id=gc.goodChange_Code) 'num'
@@ -44,27 +44,27 @@ WHERE gr.goodReach_goodCode=gd.good_code AND gr.order_id=o.order_id AND o.cus_id
         (SELECT ct.cus_id FROM goodReach r,`order` o,customer ct WHERE r.goodReach_id=#{id} AND r.order_id=o.order_id AND o.cus_id=ct.cus_id) "cusid",
            IF(gc6.b="shdck",IF(gc6.c&lt;=gc6.goodChange_num,gc6.c,gc6.goodChange_num) ,gc6.c-gc6.b) "sl"
         FROM (
-        SELECT *,(SELECT IF(SUM(gc5.goodChange_num)-1 &lt;= gc3.num,gc3.num-SUM(gc5.goodChange_num)+1,"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId ) "c",
-        (SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,IF((SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))-1&lt;=gc3.num,gc3.num-(SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))+1,'shdck'),'yck') 'v' FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId ) 'b'
+        SELECT *,(SELECT IF(SUM(gc5.goodChange_num)-1 &lt;= gc3.num,gc3.num-SUM(gc5.goodChange_num)+1,"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId AND gc5.order_id=(SELECT order_id FROM goodreach WHERE goodReach_id=#{id} ) ) "c",
+        (SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,IF((SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))-1&lt;=gc3.num,gc3.num-(SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))+1,'shdck'),'yck') 'v' FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId AND gc5.order_id=(SELECT order_id FROM goodreach WHERE goodReach_id=#{id} ) ) 'b'
         FROM (SELECT *,(SELECT SUM(gc.goodChange_num)
         FROM goodchange gc
         WHERE gc.state=0 AND gc.goodChange_inTime&lt;=gc2.goodChange_inTime AND gc2.goodChange_goodId=gc.goodChange_goodId
         ORDER BY gc.goodChange_inTime) "num"
         FROM goodchange gc2,good gd
-        WHERE  gc2.state=0 AND gd.good_id=gc2.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} )
+        WHERE  gc2.state=0 AND gd.good_id=gc2.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} ) AND gc2.order_id=(SELECT order_id FROM goodreach WHERE goodReach_id=#{id} )
         ORDER BY gc2.goodChange_inTime) gc3) gc6 ,good gd
         WHERE gd.good_id=gc6.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} ) AND gc6.goodChange_inTime&lt;=
         (SELECT gc6.goodChange_inTime
         FROM (
-        SELECT *,(SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,gc3.num-SUM(gc5.goodChange_num)+1,"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId ) "c",
+        SELECT *,(SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,gc3.num-SUM(gc5.goodChange_num)+1,"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId AND gc5.order_id=(SELECT order_id FROM goodreach WHERE goodReach_id=#{id} ) ) "c",
         (SELECT IF(SUM(gc5.goodChange_num)-1&lt;=gc3.num,IF((SUM(gc5.goodChange_num)+(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))-1&lt;=gc3.num,gc3.num-(SUM(gc5.goodChange_num)
-        +(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))+1,"shdck"),"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId  ) "b"
+        +(SELECT goodReach_ExceptNum FROM goodreach WHERE goodReach_id=#{id} ))+1,"shdck"),"yck") "v" FROM goodchange gc5 WHERE gc5.state=1 and gc5.goodChange_goodId=gc3.goodChange_goodId AND gc5.order_id=(SELECT order_id FROM goodreach WHERE goodReach_id=#{id} )  ) "b"
         FROM (SELECT *,(SELECT SUM(gc.goodChange_num)
         FROM goodchange gc
         WHERE gc.state=0 AND gc.goodChange_inTime&lt;=gc2.goodChange_inTime AND gc2.goodChange_goodId=gc.goodChange_goodId
         ORDER BY gc.goodChange_inTime) "num"
         FROM goodchange gc2,good gd
-        WHERE gc2.state=0 AND gd.good_id=gc2.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} )
+        WHERE gc2.state=0 AND gd.good_id=gc2.goodChange_goodId AND gd.good_code=(SELECT goodreach_goodCode FROM goodreach WHERE goodReach_id=#{id} )AND gc2.order_id=(SELECT order_id FROM goodreach WHERE goodReach_id=#{id} )
         ORDER BY gc2.goodChange_inTime) gc3) gc6
         WHERE  gc6.b !="shdck" AND gc6.c!="yck"
         LIMIT 0,1) AND gc6.c!="yck"
@@ -72,7 +72,8 @@ WHERE gr.goodReach_goodCode=gd.good_code AND gr.order_id=o.order_id AND o.cus_id
     <select id="goodchange2All" parameterType="map" resultType="map">
  SELECT *
 FROM goodchange
-WHERE goodChange_goodId=(SELECT gd.good_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id}) and state=1
+WHERE goodChange_goodId=(SELECT gd.good_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id} ) AND state=1 AND
+(SELECT gr.order_id FROM goodreach gr,good gd WHERE gr.goodReach_goodCode=gd.good_code AND gr.goodReach_id=#{id} )=order_id
     </select>
     <update id="goodupd" parameterType="map">
     UPDATE good

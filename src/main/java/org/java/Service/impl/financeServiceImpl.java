@@ -2,6 +2,7 @@ package org.java.Service.impl;
 
 import org.java.Service.financeService;
 import org.java.dao.financeMapper;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ public class financeServiceImpl implements financeService {
         return f.onefinance(h);
     }
 
+public  void bb(){
+        System.out.print("sd");
+}
     @Override
     public List<HashMap<String, Object>> getAll() {
         return f.getAll();
@@ -36,5 +40,30 @@ public class financeServiceImpl implements financeService {
     @Override
     public void outupd(HashMap<String, Object> h) {
         f.outupd(h);
+    }
+
+    @Override
+    public List<HashMap<String, Object>> rkf(HashMap<String, Object> h) {
+        return f.rkf(h);
+    }
+
+    @Override
+    public List<HashMap<String, Object>> ckf(HashMap<String, Object> h) {
+        return f.ckf(h);
+    }
+
+    @Override
+    public HashMap<String, Object> kjs(HashMap<String, Object> h) {
+        return f.kjs(h);
+    }
+
+    @Override
+    public HashMap<String, Object> ddxx(HashMap<String, Object> h) {
+        return f.ddxx(h);
+    }
+
+    @Override
+    public List<HashMap<String, Object>> dd() {
+        return f.dd();
     }
 }

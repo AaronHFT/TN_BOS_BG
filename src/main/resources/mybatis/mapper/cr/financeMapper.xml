@@ -24,28 +24,48 @@ WHERE di.client_id=ct.cus_id AND di.state=1
 WHERE y2.carriagebid=s1.goodChange_Code AND y2.comebankbid=s2.goodChange_Code and y2.comebankbid=#{id}
 ) b
 	</select>
-
     <select id="getAll" resultType="map">
 SELECT *,rkf+ckf+yf AS 'zfy'
 FROM jf
     </select>
-
     <update id="upd" parameterType="map">
         UPDATE countmenty
 SET ispayment=1
 WHERE id=#{id}
     </update>
-
     <select id="outAll" resultType="map">
     SELECT *
     FROM chargeOff co, car_schedule_details cd,pilot pt
     WHERE cd.driverid=pt.pilot_id AND co.driverid=cd.Schedule_details_id
     </select>
-
     <update id="outupd" parameterType="map">
 UPDATE  chargeOff
-SET ispayment=1
+SET ispayment="已结算"
 WHERE id=#{id}
    </update>
+<select id="rkf" parameterType="map" resultType="map">
+  SELECT *, ifnull(3*g.goodChange_volume,0) 'rkf'
+FROM goodchange g,good gd
+WHERE order_id=#{id} AND state=0 AND g.goodChange_goodId=gd.good_Id
+</select>
+    <select id="ckf" parameterType="map" resultType="map">
+        SELECT *,ifnull(10*DATEDIFF(g1.goodChange_inTime,(SELECT g2.goodChange_inTime FROM goodchange g2 WHERE g2.order_id=#{id} AND g2.state=0 AND g2.good_line=g1.good_line ))*goodChange_volume,0) 'ckf'
+FROM goodchange g1,good gd
+WHERE g1.order_id=#{id} AND g1.state=1 AND g1.goodChange_goodId=gd.good_Id
+    </select>
+    <select id="kjs" parameterType="map" resultType="map">
+        SELECT (SELECT SUM(goodChange_num) FROM goodchange WHERE state=0 AND order_id=#{id})
+-(SELECT SUM(goodChange_num) FROM goodchange WHERE state=1 AND order_id=#{id} ) 'kjs'
+    </select>
+    <select id="ddxx" parameterType="map" resultType="map">
+        SELECT *
+FROM countmenty c,`order` o,customer ct
+WHERE c.ctype=o.order_id AND o.cus_id=ct.cus_id AND c.ctype=#{id}
+    </select>
+    <select id="dd" resultType="map">
+SELECT *
+FROM countmenty c ,`order` o,customer ct
+WHERE c.ctype=o.order_id AND o.cus_id=ct.cus_id
+    </select>
 
 </mapper>

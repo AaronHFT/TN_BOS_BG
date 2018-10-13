@@ -25,7 +25,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
-
+import org.junit.jupiter.api.Test;
 
 
 public class activiteAPi {
@@ -48,7 +48,6 @@ public class activiteAPi {
      * 部署流程定义到数据库中 需要用的服务 RepositoryService 分别添加: bpmn,png
      *
      */
-
     public void deployeeProcessDefinition1() {
         RepositoryService service = engine.getRepositoryService();
         String bpmn_name = "MyProcess.bpmn";
@@ -91,7 +90,6 @@ public class activiteAPi {
     /**
      * 启动流程实程 要使用的服务:RuntimeService
      */
-
     public void startProcessInstance() {
 
         RuntimeService service = engine.getRuntimeService();
@@ -167,8 +165,10 @@ public class activiteAPi {
      * 查看所有的流程定义
      * 服务:RepositoryService
      */
+@Test
+    private void showProcessDefinition(){
 
-    public void showProcessDefinition(){
+    System.out.println("QWQ");
         RepositoryService service = engine.getRepositoryService();
         //创建流程定义查询对象
         ProcessDefinitionQuery query = service.createProcessDefinitionQuery();

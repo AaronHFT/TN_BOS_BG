@@ -14,24 +14,18 @@
     <title>Title</title>
 </head>
 <body>
-<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+<table  class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
     <thead>
     <tr class="text-c" >
         <td>客户姓名</td>
-        <td>入库费</td>
-        <td>存储费</td>
-        <td>运输费</td>
-        <td>总计</td>
+        <td>下单时间</td>
         <td>是否结账</td>
     </tr>
     </thead>
     <tr class="text-c"  th:each=" f : ${session.flist}" >
-        <td th:text="${f.khxm}"></td>
-        <td th:text="${f.rkf}"></td>
-        <td th:text="${f.ckf}"></td>
-        <td th:text="${f.yf}"></td>
-        <td th:text="${f.zfy}"></td>
-        <td>[[${f.sfjz}]]<span><a id="bbb" th:bbb="${f.zfy}" th:ccc="${f.id}" th:if="${f.sfjz} eq '未结账'" >结账</a>     </span></td>
+        <td th:text="${f.cus_name}"></td>
+        <td th:text="${f.order_time}"></td>
+        <td>[[${f.ispayment}]]<span> <a class="bbb" th:href="@{/finance/ckxq(id=${f.order_id})}" th:ccc="${f.id}"  th:bbb="${f.order_id}"  th:if="${f.ispayment} eq '未结账'" >查看详情</a> </span></td>
     </tr>
 </table>
 <div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -42,7 +36,7 @@
                 <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
             </div>
             <div class="modal-body">
-                <img src="" alt="" id="img" /><br>
+
             </div>
             <div class="modal-footer">
 
@@ -64,9 +58,17 @@
 <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
 <script type="text/javascript">
     $(function(){
+$(".bbb").click(function(){
+    var vv=$(this).attr("ccc");
+    $.post("ajaxid",{"ajaxid":vv},function(res){
+        alert(res)
+    })
+
+    }
+)
 
 
-        $("#bbb").click(sum_menty)
+
     })
     $('.table-sort').dataTable({
         "bStateSave": true,//状态保存
@@ -100,9 +102,9 @@
         $.post("ajaxid",{"ajaxid":vv},function(res){
             alert(res)
         })
+        var orderid=$(this).attr("bbb");
         var v=$(this).attr("bbb")
-        $("#title").text("请付"+v+"元")
-        zf()
+        zf(orderid)
         modaldemo()
     }
     /*关闭*/
@@ -111,10 +113,11 @@
     }
     /*显示支付二维码*/
     function zf(){
-        $.post("http://120.78.142.80/myPay/appid_create_order",{"payTo":"AliPay","appId":"XVCNcCNrVgX57D74FE80E77F50AE8383","playerId":"sVCNeCNuVTsF809995DA27B6B7B3D7D5","goodsId":"001" },function(res){
-            alert(res.msg)
-            $("#img").prop("src","http://qr.liantu.com/api.php?w=460&text="+res.orderInfo.qrcodeURL)
-        },"JSON")}
+
+
+
+
+    }
 
     /*资讯-添加*/
     function article_add(title,url,w,h){

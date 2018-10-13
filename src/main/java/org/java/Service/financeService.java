@@ -9,4 +9,9 @@ public interface financeService {
     public  void upd(HashMap<String, Object> h);
     public  List<HashMap<String,Object>> outAll();
     public  void outupd(HashMap<String, Object> h);
+    public  List<HashMap<String,Object>> rkf(HashMap<String,Object>h);
+    public List<HashMap<String,Object>> ckf(HashMap<String,Object>h);
+    public  HashMap<String,Object> kjs(HashMap<String,Object>h);
+    public  HashMap<String,Object> ddxx(HashMap<String,Object>h);
+    public  List<HashMap<String,Object>> dd();
 }
