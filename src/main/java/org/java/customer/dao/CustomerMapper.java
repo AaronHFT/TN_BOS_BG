@@ -30,4 +30,16 @@ public interface CustomerMapper {
 
     //保存客户信息
     void saveCustomer(Map<String,Object> m);
+
+    //加载所有联系人
+    List<Map<String,Object>> loadContacts(Map<String,Object> map);
+
+    //根据Id删除联系人
+    void delContact(Map<String,Object> map);
+
+    //新增联系人
+    void addContact(Map<String,Object> map);
+
+    //编辑联系人
+    void editContact(Map<String,Object> map);
 }

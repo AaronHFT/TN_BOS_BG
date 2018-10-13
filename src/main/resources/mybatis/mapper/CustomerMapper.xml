@@ -29,4 +29,28 @@
 	WHERE
 	`cus_id` = #{cus_id};
     </update>
+
+    <select id="loadContacts" parameterType="map" resultType="map">
+        SELECT *
+        FROM contacts c
+        WHERE c.cus_id = #{cid};
+    </select>
+
+    <delete id="delContact" parameterType="map">
+        DELETE FROM contacts WHERE con_id = #{delId};
+    </delete>
+
+    <insert id="addContact" parameterType="map">
+        INSERT INTO contacts VALUES(NULL,#{con_name},#{con_phone},#{con_address},#{cus_id});
+    </insert>
+
+    <update id="editContact" parameterType="map">
+        UPDATE `tn_bos`.`contacts`
+	SET
+	`con_name` = #{con_name} ,
+	`con_phone` = #{con_phone} ,
+	`con_address` = #{con_address}
+	WHERE
+	`con_id` = #{con_id};
+    </update>
 </mapper>

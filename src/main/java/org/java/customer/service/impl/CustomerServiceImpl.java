@@ -46,4 +46,25 @@ public class CustomerServiceImpl  implements CustomerService {
     public void saveCustomer(Map<String, Object> m) {
         cusMapper.saveCustomer(m);
     }
+
+    @Override
+    public List<Map<String, Object>> loadContacts(Map<String, Object> map) {
+        return cusMapper.loadContacts(map);
+    }
+
+    @Override
+    public void delContact(Map<String, Object> map) {
+        cusMapper.delContact(map);
+    }
+
+    @Override
+    public void addContact(Map<String, Object> map) {
+        cusMapper.addContact(map);
+    }
+
+    @Override
+    public void editContact(Map<String, Object> map) {
+        cusMapper.editContact(map);
+    }
+
 }

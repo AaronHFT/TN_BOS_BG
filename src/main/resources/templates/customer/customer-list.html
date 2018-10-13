@@ -52,12 +52,34 @@
 					<td class="td-manage">
 						<a title="编辑" th:onclick="'javascript:customer_edit(\''+${c.cus_id}+'\')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
 						<a title="删除" th:onclick="'javascript:customer_del(\''+this+'\',\''+${c.cus_id}+'\')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+						<a title="联系人" th:onclick="'javascript:showContacts(\''+${c.cus_id}+'\')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe62b;</i></a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<div id="contacts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">联系人列表</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<p><input class="btn btn-primary size-MINI radius" type="button" value="新增联系人" onclick="addContact()" id="addConBtn"></p>
+				<table class="table table-border table-bordered radius" id="conTab" align="center">
+				</table>
+				<input type="hidden" id="cus_con_id">
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
 <script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
@@ -78,6 +100,71 @@ $('.table-sort').dataTable({
 	]
 });
 
+/*添加联系人窗口*/
+function addContact() {
+    $('#addConBtn').attr({"disabled":"disabled"});
+    var tr = '<tr><td> <input type="text" class="input-text radius size-MINI" id="con_name"> </td><td><input type="text" class="input-text radius size-MINI" id="con_phone"></td><td><input type="text" class="input-text radius size-MINI" id="con_address"></td><td><a title="保存" onclick="addCon()" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6a7;</i></a><a title="保存" onclick="backCon(this)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe66b;</i></a></td></tr>';
+    $('#conTab').append(tr);
+}
+
+/*添加联系人*/
+function addCon(){
+    $.post("/customer/addContact",{"cus_id":$('#cus_con_id').val(),"con_name":$('#con_name').val(),"con_phone":$('#con_phone').val(),"con_address":$('#con_address').val()},function () {
+		showContacts($('#cus_con_id').val());
+        $('#addConBtn').attr({"disabled":false});
+    });
+}
+
+/*取消添加*/
+function backCon(obj){
+	$(obj).parent().parent().remove();
+    $('#addConBtn').attr({"disabled":false});
+}
+
+/*显示所有联系人*/
+function showContacts(id){
+    $('#cus_con_id').val(id);
+    $("#contacts").modal("show");
+    $.post('/customer/loadContacts',{"cid":id},function(data){
+        var tr = "<tr><th>姓名</th><th>电话</th><th>地址</th><th>操作</th></tr>";
+		$.each(data,function(i,obj){
+			tr += '<tr><td>'+obj.con_name+'</td><td>'+obj.con_phone+'</td><td>'+obj.con_address+'</td><td><a title="编辑" onclick="contact_edit(this,\''+obj.con_id+'\')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a><a title="删除" onclick="contact_del(this,\''+obj.con_id+'\')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td></tr>';
+		});
+        $('#conTab').html(tr);
+	});
+}
+
+/*编辑联系人*/
+function contact_edit(obj,id){
+    var name = $(obj).parent().parent().find("td").eq(0).text();
+    var phone = $(obj).parent().parent().find("td").eq(1).text();
+	var address = $(obj).parent().parent().find("td").eq(2).text();
+	var td = '<td> <input type="text" class="input-text radius size-MINI" id="con_name" value="'+name+'"> </td><td><input type="text" class="input-text radius size-MINI" id="con_phone" value="'+phone+'"></td><td><input type="text" class="input-text radius size-MINI" id="con_address" value="'+address+'"></td><td><a title="保存" onclick="editCon(\''+id+'\')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6a7;</i></a><a title="保存" onclick="backEdit(this)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe66b;</i></a></td>'
+    $(obj).parent().parent().html(td);
+	//禁用添加联系人按钮
+    $('#addConBtn').attr({"disabled":"disabled"});
+}
+
+/*保存编辑*/
+function editCon(id){
+    $.post("/customer/editContact",{"con_id":id,"con_name":$('#con_name').val(),"con_phone":$('#con_phone').val(),"con_address":$('#con_address').val()},function () {
+        showContacts($('#cus_con_id').val());
+        $('#addConBtn').attr({"disabled":false});
+    });
+}
+
+/*取消编辑*/
+function backEdit(){
+    showContacts($('#cus_con_id').val());
+    $('#addConBtn').attr({"disabled":false});
+}
+
+/*删除联系人*/
+function contact_del(obj,id){
+    $.post("/customer/delContact",{"delId":id},function () {
+        $(obj).parent().parent().remove();
+    });
+}
 
 /*客户-编辑*/
 function customer_edit(id){
