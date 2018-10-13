@@ -31,7 +31,8 @@
     </style>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=gNzyyyVVgseNwU31EXAttganmDLTjY64"></script>
-
+<!--
+http://api.map.baidu.com/api?v=2.0&ak=gNzyyyVVgseNwU31EXAttganmDLTjY64-->
     <title>添加计划</title>
 </head>
 <body>
@@ -56,13 +57,13 @@
     <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
     <script type="text/javascript">
         // 百度地图API功能
-        var starting = $('#starting').text();
-        var downtown = $('#downtown').text();
+        // var starting = $('#starting').text();
+        // var downtown = $('#downtown').text();
 
         var map = new BMap.Map("l-map");
         map.centerAndZoom(new BMap.Point(116.404, 39.915), 12);
-        var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
-        driving.search(starting, downtown);
+        // var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        // driving.search(starting, downtown);
     </script>
 <div class="row cl">
     <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
@@ -71,6 +72,60 @@
 </div>
 </form>
 </article>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script>
+    <!--/_footer 作为公共模版分离出去-->
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
+    <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#order_id").change(function () {
+                var sys_role_id = "";
+                $.post("/transport/planning_sel2", {order_id: $('#order_id').val()}, function (j) {
+                         if(j.goodReach_state==0){
+                            sys_role_id = '<span id="starting" >' + j.webNodes_address + '</span> <span id="downtown" >' + j.store_address + '</span>';
+                        }
+                         else{
+                           sys_role_id = '<span id="starting" >' + j.store_address + '</span> <span id="downtown" >' + j.webNodes_address + '</span>';
+                        }
+                    $('#sys_role_id').html(sys_role_id);
+                    // 百度地图API功能
+                    var starting = $('#starting').text();
+                    var downtown =$('#downtown').text();
+                    var map = new BMap.Map("l-map");
+                    var output = "从"+starting+"到"+downtown+"驾车需要";
+                    alert(output);
+                    var output1="";
+                    var output2="总路程为 ";
+                    var output3="";
+                    var searchComplete = function (results){
+                        if (transit.getStatus() != BMAP_STATUS_SUCCESS){
+                            return ;
+                        }
+                        var plan = results.getPlan(0);
+                        output1 =  plan.getDuration(true);                //获取时间
+                        output3=  plan.getDistance(true);              //获取距离
+                    };
+                    var transit = new BMap.DrivingRoute(map, {renderOptions: {map: map},
+                        onSearchComplete: searchComplete,
+                        onPolylinesSet: function(){
+                            setTimeout(function(){
+                                alert(output+output1+output2+output3);
+                                $("#output1").val(output1);
+                                $("#output3").val(output3);
+                            },"1000");
+                        }});
+                    transit.search(starting, downtown);
+                    var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+                    driving.search(starting, downtown);
+                }, "JSON");
+            })
+        })
+    </script>
 <script type="text/javascript">
     function transmit(){
         $.post('/transport/planning_add2',{
@@ -86,62 +141,5 @@
         parent.layer.close(index);//关闭弹出层
     };
 </script>
-    <!--_footer 作为公共模版分离出去-->
-    <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
-    <script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
-    <script type="text/javascript" th:src="@{/huistatic/h-ui/js/H-ui.min.js}" src="#"></script>
-    <script type="text/javascript" th:src="@{/huistatic/h-ui.admin/js/H-ui.admin.js}" src="#"></script>
-    <!--/_footer 作为公共模版分离出去-->
-    <!--请在下方写此页面业务相关的脚本-->
-    <script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="#"></script>
-    <script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
-    <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
-    <script type="text/javascript">
-        $(function () {
-            $("#order_id").change(function () {
-                var sys_role_id = "";
-                $.post("/transport/planning_sel2", {order_id: $('#order_id').val()}, function (j) {
-                    $.each(j, function (i, e) {
-                         if(e.goodReach_state==0){
-                            sys_role_id = '<span id="starting" >' + e.webNodes_address + '</span> <span id="downtown" >' + e.store_address + '</span>';
-                        }
-                         else{
-                           sys_role_id = '<span id="starting" >' + e.store_address + '</span> <span id="downtown" >' + e.webNodes_address + '</span>';
-                        }
-                    })
-                    $('#sys_role_id').html(sys_role_id);
-                }, "JSON")
-                // 百度地图API功能
-                var starting = $('#starting').text();
-                var downtown =$('#downtown').text();
-              var map = new BMap.Map("l-map");
-                var output = "从"+starting+"到"+downtown+"驾车需要";
-                var output1="";
-                var output2="总路程为 ";
-                var output3="";
-                var searchComplete = function (results){
-                    if (transit.getStatus() != BMAP_STATUS_SUCCESS){
-                        return ;
-                    }
-                    var plan = results.getPlan(0);
-                    output1 =  plan.getDuration(true) ;                //获取时间
-                    output3=  plan.getDistance(true)              //获取距离
-                }
-                var transit = new BMap.DrivingRoute(map, {renderOptions: {map: map},
-                    onSearchComplete: searchComplete,
-                    onPolylinesSet: function(){
-                        setTimeout(function(){
-                            alert(output+output1+output2+output3)
-                            $("#output1").val(output1);
-                            $("#output3").val(output3);
-                        },"1000");
-                    }});
-                transit.search(starting, downtown);
-
-                var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
-              driving.search(starting, downtown);
-            })
-        })
-    </script>
 </body>
 </html>

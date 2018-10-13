@@ -300,10 +300,10 @@ model.addAttribute("mlist", m);
      * @return
      **/
     @RequestMapping("planning_sel2")
-    public @ResponseBody List<Map<String, Object>> planning_sel2(String order_id){
+    public @ResponseBody Map<String, Object> planning_sel2(String order_id){
         List<Map<String, Object>> plist=planningServer.planning(order_id);
         //System.out.println(plist.toString());
-        return  plist;
+        return  plist.get(0);
     }
 
     /**
