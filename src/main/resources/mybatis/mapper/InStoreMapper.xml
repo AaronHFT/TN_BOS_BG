@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.InStoreMapper">
+
+    <insert id="createCheckreach" parameterType="map">
+      insert into store_order
+      values(#{id},#{goodReach_id},#{goodname},#{createtime},#{userId},#{processinstanceid},null)
+    </insert>
+
+    <select id="getInStoreTypes" resultType="map">
+        select * from inStoreType
+    </select>
+
+    <select id="getStorelist" resultType="map">
+        select * from store
+    </select>
+
+    <select id="checkStore" resultType="map">
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t
+WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
+and o.order_state in ('已制定计划','调度运输完')
+    </select>
+
+    <select id="checkPlan" resultType="map">
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t
+WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
+and o.order_state in ('已确认','调度运输完')
+    </select>
+
+    <update id="editorder" parameterType="String">
+        update `order` set order_state='已确认' where order_id=#{orderid}
+    </update>
+
+    <select id="getGoodinfo" parameterType="String" resultType="map">
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t
+WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id AND g.goodReach_id=#{gid}
+    </select>
+
+    <insert id="createPlanorder" parameterType="map">
+        insert into tn_bos_entryorder
+        values(#{planid},#{orderid},#{cusid},#{goodreachid},#{plantime},#{instoretype},#{instoremethod},#{storeid})
+    </insert>
+
+    <update id="editOrderPlan" parameterType="String">
+        update `order` set order_state='已制定计划' where order_id=#{orderid}
+    </update>
+
+    <insert id="createCheckGood" parameterType="map">
+        insert into goodcheck
+        values(null,#{checkid},#{userid},#{checktime},#{cusid},#{truckid},#{pilotid},#{orderid},#{goodname},#{goodcode},#{standrad},#{goodlevel},#{exceptnum},#{realnum},#{acceptnum},#{destorynum},#{laynum},#{producedate},#{securedate},#{weight},#{volum},#{unit})
+    </insert>
+
+    <insert id="createGoodAccept" parameterType="map">
+        insert into goodaccept
+        values(null,#{acceptcode},#{cusid},#{truckid},#{pilotid},#{orderid},#{goodname},#{goodcode},#{standard},#{goodlevel},#{exceptnum},#{realnum},#{acceptnum},#{destorynum},#{laynum},null,#{producedate},#{securdate},#{weight},#{volume},#{unit})
+    </insert>
+
+    <select id="showStores" resultType="map">
+        SELECT * FROM store s,store_region r,store_position p
+        WHERE s.store_id=r.store_id AND r.store_region_id=p.store_region_id
+    </select>
+
+    <select id="showAllcheckOrder" resultType="map">
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t,tn_bos_entryorder b
+WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
+AND b.goodReach_id=g.goodReach_id
+AND o.order_state='已验收'
+    </select>
+
+    <update id="checkStoretrue" parameterType="String">
+        update `order` set order_state='已到货' where order_id=#{orderid}
+    </update>
+
+    <select id="getOrderinfo" parameterType="String" resultType="map">
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t,tn_bos_entryorder b,instoretype i,goodcheck k,goodaccept e
+WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id AND i.instoretype_id=b.inStoreType_id
+AND k.order_id=o.order_id
+AND b.goodReach_id=g.goodReach_id
+AND e.order_id=o.order_id
+AND o.order_state='已验收'
+AND o.order_id=#{orderid}
+    </select>
+
+    <select id="getStoreRegion" resultType="map">
+        select * from store_region
+    </select>
+
+    <select id="getStorePosition" resultType="map">
+        select * from store_position
+    </select>
+
+    <select id="findByGoodcode" resultType="map" parameterType="String">
+        select * from good where good_code=#{goodcode}
+    </select>
+
+    <insert id="goodInstore" parameterType="map">
+        insert into goodchange values (#{goodChangecode},#{goodline},#{acceptcode},#{storePosition},#{goodid},#{truckid},#{pilotid},#{orderid},#{client},#{instoretime},#{producedate},#{secureDate},#{num},#{unit},#{weight},#{volume},#{level},#{type},0)
+    </insert>
+
+    <insert id="goodAdd" parameterType="map">
+        insert into good values (null,#{position},#{goodname},#{goodcode},#{standard},'-',#{num},'50','100',#{unit},#{weight},#{volume},#{level})
+    </insert>
+
+    <select id="findGoodBycode" parameterType="String" resultType="map">
+        select * from good where good_code=#{goodcode}
+    </select>
+
+    <update id="updateGood" parameterType="map">
+        update good set good_num=good_num+#{num} where good_id=#{goodid}
+    </update>
+
+    <update id="checkOrderInstore" parameterType="String">
+        update `order` set order_state='质检完成' where order_id=#{orderid}
+    </update>
+
+    <select id="findOrderByid" parameterType="String" resultType="map">
+        select * from `order` where order_id=#{orderid}
+    </select>
+
+    <update id="editOrderCheck" parameterType="String">
+        update `order` set order_state='验收中' where order_id=#{orderid}
+    </update>
+
+    <update id="checkOrdertrue" parameterType="String">
+        update `order` set order_state='已验收' where order_id=#{orderid}
+    </update>
+
+    <select id="showGoodCheck" resultType="map">
+        SELECT * FROM goodcheck g,sys_user s
+WHERE g.goodCheck_managerId=s.sys_user_id
+    </select>
+
+    <select id="findCheckgoodByid" resultType="map" parameterType="String">
+        SELECT * FROM goodcheck g,sys_user s,customer c,pilot p
+WHERE g.goodCheck_managerId=s.sys_user_id
+AND g.client_id=c.cus_id
+AND g.pilot_id=p.pilot_id
+AND goodCheck_id=#{goodcheckid}
+    </select>
+
+    <update id="editOrderFail" parameterType="String">
+        update `order` set order_state='已到货' where order_id=#{orderid}
+    </update>
+
+    <delete id="delGoodcheck" parameterType="String">
+        delete from goodcheck where goodCheck_id=#{goodcheckid}
+    </delete>
+
+</mapper>
