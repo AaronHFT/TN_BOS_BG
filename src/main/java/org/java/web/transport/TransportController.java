@@ -185,7 +185,7 @@ public String carManage_sel(String truck_type,Model model){
     @RequestMapping("carManage_del")
     public String carManage_del(String truck_id){
         carManageServer.carManage_del(truck_id);
-        return "/distribution/carManage_show";
+        return "redirect:/transport/carManage";
     }
 
     /**
@@ -225,7 +225,7 @@ public String carManage_sel(String truck_type,Model model){
         public  String carManage_add2(@RequestParam Map<String, Object> m){
         String truckImage="/transport/img/"+m.get("Image").toString().substring(12);
         Random rand = new Random();
-        m.put("truck_id","20180000"+(rand.nextInt(87) + (14)));
+        m.put("truck_id","2018000"+(rand.nextInt(87) + (14)));
         m.put("rid","1");
         m.put("truckState", "空闲");
         m.put("truckLength",0);
