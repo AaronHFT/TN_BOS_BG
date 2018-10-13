@@ -435,6 +435,9 @@ public  String planning_add2(@RequestParam Map<String, Object> m){
             if (!map.containsKey("truck_id")){
                 map.put("truck_id", "-");
             }
+            if(!map.containsKey("pilot_id")){
+                map.put("pilot_id", "-");
+            }
         }
         model.addAttribute("alist", alist);
         return  "/distribution/allocation";
