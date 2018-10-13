@@ -22,4 +22,12 @@ public interface CustomerService {
     Map<String,Object> showCustomerById(Map<String,Object> id);
 
     void saveCustomer(Map<String,Object> m);
+
+    List<Map<String,Object>> loadContacts(Map<String,Object> map);
+
+    void delContact(Map<String,Object> map);
+
+    void addContact(Map<String,Object> map);
+
+    void editContact(Map<String,Object> map);
 }

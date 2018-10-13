@@ -48,10 +48,14 @@
 					<td th:text="${c.cont_price}"></td>
 					<td th:text="${c.cont_state}"></td>
 					<td class="td-manage">
-						<a title="编辑" th:onclick="'javascript:cont_edit(\''+${c.cont_id}+'\',\''+${c.cont_price}+'\')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+						<span th:if="${c.cont_state == '待签订'}"><a title="编辑" th:onclick="'javascript:cont_edit(\''+${c.cont_id}+'\',\''+${c.cont_price}+'\')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
 						<a title="删除" th:onclick="'javascript:cont_del(\''+this+'\',\''+${c.cont_id}+'\')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
 						<a title="确认" th:onclick="'javascript:cont_sign(\''+${c.order_id}+'\',\''+${c.cont_id}+'\')'" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6a8;</i></a>
-					</td>
+					</span>
+						<span th:if="${c.cont_state == '已签订'}">
+						<input class="btn btn-success radius size-MINI" type="button" value="已完成">
+						</span>
+						</td>
 				</tr>
 			</tbody>
 		</table>

@@ -78,4 +78,35 @@ public class CustomerController {
     public String openEdit(){
         return "/customer/customer-edit";
     }
+
+    //加载联系人
+    @RequestMapping("loadContacts")
+    @ResponseBody
+    public Object loadContacts(@RequestParam Map<String,Object> map){
+        return cusService.loadContacts(map);
+    }
+
+    //删除联系人
+    @RequestMapping("delContact")
+    @ResponseBody
+    public Object delContact(@RequestParam Map<String,Object> map){
+        cusService.delContact(map);
+        return "";
+    }
+
+    //新增联系人
+    @RequestMapping("addContact")
+    @ResponseBody
+    public Object addContact(@RequestParam Map<String,Object> map){
+      cusService.addContact(map);
+      return "";
+    }
+
+    //编辑联系人-保存
+    @RequestMapping("editContact")
+    @ResponseBody
+    public Object editContact(@RequestParam Map<String,Object> map){
+        cusService.editContact(map);
+        return "";
+    }
 }

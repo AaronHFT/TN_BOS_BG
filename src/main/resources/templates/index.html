@@ -57,6 +57,33 @@
             </dd>
         </dl>
         <dl>
+            <dt><i class="Hui-iconfont">&#xe616;</i> 配送管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a data-href="#" th:data-href="@{/transport/allocation}" data-title="配送分配" href="javascript:void(0)">配送分配</a></li>
+                    <li><a data-href="#" th:data-href="@{/transport/distribution_plan}" data-title="配送计划" href="javascript:void(0)">配送计划</a></li>
+                    <li><a data-href="#" th:data-href="@{/transport/carManage}" data-title="车辆管理" href="javascript:void(0)">车辆管理</a></li>
+                    <li><a data-href="#" th:data-href="@{/transport/driverManage}" data-title="驾驶员管理" href="javascript:void(0)">驾驶员管理</a></li>
+                    <li><a data-href="#" th:data-href="@{/transport/pandect_GPS}" data-title="运输车辆GPS定位" href="javascript:void(0)">运输车辆GPS定位</a></li>
+                    <li><a data-href="#" th:data-href="@{/transport/transportcheck}" data-title="车辆考核" href="javascript:void(0)">车辆考核</a></li>
+                    <li><a data-href="#" th:data-href="@{/transport/pandectTranspot}" data-title="运输总览" href="javascript:void(0)">运输总览</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt><i class="Hui-iconfont">&#xe616;</i>收货管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a th:data-href="@{/Instore/checkStore(name=checkstore)}" data-title="到货确认" href="javascript:void(0)">到货确认</a></li>
+                    <li><a th:data-href="@{/Instore/checkStore(name=makeplan)}" data-title="创建入库计划表" href="javascript:void(0)">创建入库计划表</a></li>
+                    <li><a th:data-href="@{/Instore/checkGood}" data-title="创建货物验收单" href="javascript:void(0)">创建货物验收单</a></li>
+                    <li><a th:data-href="@{/Instore/showCheckGood}" data-title="货物验收" href="javascript:void(0)">货物验收</a></li>
+                    <li><a th:data-href="@{/Instore/goodAccept}" data-title="创建收货单" href="javascript:void(0)">创建收货单</a></li>
+                    <li><a th:data-href="@{/Instore/assignStorage}" data-title="库位分配" href="javascript:void(0)">库位分配</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
             <dt><i class="Hui-iconfont">&#xe616;</i> 出库管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
@@ -98,32 +125,6 @@
                     <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="调换处理" href="javascript:void(0)">调换处理</a></li>
                     <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="包装处理" href="javascript:void(0)">包装处理</a></li>
                     <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="报废处理" href="javascript:void(0)">报废处理</a></li>
-                </ul>
-            </dd>
-        </dl>
-        <dl>
-            <dt><i class="Hui-iconfont">&#xe616;</i>系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-            <dd>
-                <ul>
-                    <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="用户管理" href="javascript:void(0)">用户管理</a></li>
-                    <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="工作组管理" href="javascript:void(0)">工作组管理</a></li>
-                    <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
-                    <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="密码修改" href="javascript:void(0)">密码修改</a></li>
-                    <li><a data-href="${pageContext.request.contextPath }/attendance/initSign.do" data-title="屏幕保护" href="javascript:void(0)">屏幕保护</a></li>
-                </ul>
-            </dd>
-        </dl>
-        <dl>
-            <dt><i class="Hui-iconfont">&#xe616;</i> 配送管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-            <dd>
-                <ul>
-                    <li><a data-href="#" th:data-href="@{/transport/allocation}" data-title="配送分配" href="javascript:void(0)">配送分配</a></li>
-                    <li><a data-href="#" th:data-href="@{/transport/distribution_plan}" data-title="配送计划" href="javascript:void(0)">配送计划</a></li>
-                    <li><a data-href="#" th:data-href="@{/transport/carManage}" data-title="车辆管理" href="javascript:void(0)">车辆管理</a></li>
-                    <li><a data-href="#" th:data-href="@{/transport/driverManage}" data-title="驾驶员管理" href="javascript:void(0)">驾驶员管理</a></li>
-                    <li><a data-href="#" th:data-href="@{/transport/pandect_GPS}" data-title="运输车辆GPS定位" href="javascript:void(0)">运输车辆GPS定位</a></li>
-                    <li><a data-href="#" th:data-href="@{/transport/transportcheck}" data-title="车辆考核" href="javascript:void(0)">车辆考核</a></li>
-                    <li><a data-href="#" th:data-href="@{/transport/pandectTranspot}" data-title="运输总览" href="javascript:void(0)">运输总览</a></li>
                 </ul>
             </dd>
         </dl>
