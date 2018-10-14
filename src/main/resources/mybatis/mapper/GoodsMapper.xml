@@ -212,4 +212,13 @@ WHERE c1.checkGood_goodLine=g1.good_line
         set goodAccept_standard=#{newStandard},goodAccept_acceptNum=#{newNum}
         where order_id=#{orderId}
     </update>
+
+    <!--查询报废记录-->
+    <select id="findBadGoods" resultType="java.util.HashMap">
+        SELECT *
+FROM goodChange g1,good g2
+WHERE state=1
+      AND goodChange_type=11
+      AND g1.goodChange_goodId=g2.good_id;
+    </select>
 </mapper>

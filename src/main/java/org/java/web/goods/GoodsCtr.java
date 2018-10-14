@@ -42,6 +42,7 @@ public class GoodsCtr {
         map.put("goodId",goodId);
         map.put("goodLv",goodLv);
         goodsService.lvChange(map);
+
         return "redirect:/goods/findAllGood";
     }
 
@@ -277,5 +278,12 @@ public class GoodsCtr {
         }
         goodsService.unitTrans(map);
         return "redirect:/goods/unitConversion";
+    }
+
+    //查询报废记录
+    @RequestMapping("/findBadGoods")
+    public String findBadGoods(Model model){
+        model.addAttribute("list", goodsService.findBadGoods());
+        return "/goods/findBadGoods";
     }
 }

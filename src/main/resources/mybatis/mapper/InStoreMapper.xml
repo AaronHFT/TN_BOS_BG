@@ -18,12 +18,14 @@
     <select id="checkStore" resultType="map">
         SELECT * FROM goodreach g,`order` o,customer c,contacts t
 WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
+and g.goodReach_state='0'
 and o.order_state in ('已制定计划','调度运输完')
     </select>
 
     <select id="checkPlan" resultType="map">
         SELECT * FROM goodreach g,`order` o,customer c,contacts t
 WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
+and g.goodReach_state='0'
 and o.order_state in ('已确认','调度运输完')
     </select>
 
@@ -127,8 +129,10 @@ AND o.order_id=#{orderid}
     </update>
 
     <select id="showGoodCheck" resultType="map">
-        SELECT * FROM goodcheck g,sys_user s
+        SELECT * FROM goodcheck g,sys_user s,`order` o
 WHERE g.goodCheck_managerId=s.sys_user_id
+AND g.order_id=o.order_id
+AND o.order_state='验收中'
     </select>
 
     <select id="findCheckgoodByid" resultType="map" parameterType="String">
@@ -174,6 +178,7 @@ and o.order_state='已验收'
     <select id="acceptGood" resultType="map" parameterType="String">
         SELECT * FROM goodcheck g,`order` o
 WHERE g.order_id=o.order_id
+and o.order_id=#{orderid}
     </select>
 
     <select id="IsChecked" parameterType="map" resultType="map">

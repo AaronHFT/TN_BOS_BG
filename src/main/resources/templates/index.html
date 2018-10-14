@@ -87,8 +87,8 @@
             <dt><i class="Hui-iconfont">&#xe616;</i> 出库管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a data-href="#" th:data-href="@{/outStore/goodchangAll}" data-title="捡货清单打印" href="javascript:void(0)">捡货清单打印</a></li>
-                    <li><a data-href="#" th:data-href="@{/outStore/pickUpListAll}" data-title="操作人员捡货" href="javascript:void(0)">操作人员捡货</a></li>
+                    <li><a data-href="#" th:data-href="@{/outStore/orderAll}" data-title="捡货清单打印" href="javascript:void(0)">捡货清单打印</a></li>
+                    <li><a data-href="#" th:data-href="@{/outStore/pickuplistAll}" data-title="操作人员捡货" href="javascript:void(0)">操作人员捡货</a></li>
                 </ul>
             </dd>
         </dl>
@@ -96,8 +96,7 @@
             <dt><i class="Hui-iconfont">&#xe616;</i> 财务管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a th:data-href="@{finance/wjs}"  data-title="客户收款" href="javascript:void(0)">客户收款</a></li>
-                    <li><a th:data-href="@{finance/outjs}"  data-title="承运人付款" href="javascript:void(0)">承运人付款</a></li>
+                    <li><a th:data-href="@{/finance/wjs}"  data-title="订单结算" href="javascript:void(0)">订单结算</a></li>
                 </ul>
             </dd>
         </dl>
@@ -118,6 +117,7 @@
                     <li><a data-href="#" th:data-href="@{/goods/lineIndex}" data-title="盘点处理" href="javascript:void(0)">盘点处理</a></li>
                     <li><a data-href="#" th:data-href="@{/goods/findGoodsForReturn}" data-title="退货处理" href="javascript:void(0)">退货处理</a></li>
                     <li><a data-href="#" th:data-href="@{/goods/findAllReturnOrder}" data-title="退货查询" href="javascript:void(0)">退货查询</a></li>
+                    <li><a data-href="#" th:data-href="@{/goods/findBadGoods}" data-title="报废记录" href="javascript:void(0)">报废记录</a></li>
                 </ul>
             </dd>
         </dl>

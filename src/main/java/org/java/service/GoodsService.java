@@ -64,4 +64,6 @@ public interface GoodsService {
     public void unitTrans(Map<String,Object> map);
 
     public void checkGoodInStore(Map<String,Object> map);
+
+    public List<Map<String,Object>> findBadGoods();
 }

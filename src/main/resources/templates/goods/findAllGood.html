@@ -17,17 +17,6 @@
 </head>
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>货物管理 <span class="c-gray en">&gt;</span>查询库存 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
-<form>
-    查询方式：<select id="tableType">
-        <option value="1">收货清单</option>
-        <option value="2">库存汇总表</option>
-        <option value="4">库存动态汇总表</option>
-        <option value="5">库存动态明细表</option>
-        <option value="6">客户销售汇总表</option>
-        <option value="7">客户销售明细表</option>
-    </select>
-    <input type="submit" value="查询"/>
-</form>
 <div>
     <div>
         <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
@@ -38,7 +27,7 @@
                 <th width="120">货物名称</th>
                 <th width="120">货物代码</th>
                 <th width="120">规格</th>
-                <th width="120">批号</th>
+                <!--<th width="120">批号</th>-->
                 <th width="120">数量</th>
                 <th width="120">库存最小量</th>
                 <th width="120">库存最大量</th>
@@ -56,7 +45,7 @@
                 <td th:text="${t.good_name }"></td>
                 <td th:text="${t.good_code }"></td>
                 <td th:text="${t.good_standard }"></td>
-                <td th:text="${t.good_lotNum }"></td>
+                <!--<td th:text="${t.good_lotNum }"></td>-->
                 <td th:text="${t.good_num }" th:if="${t.good_num < t.good_minNum}" style="color: red;font-weight: bolder"></td>
                 <td th:text="${t.good_num }" th:if="${t.good_num >= t.good_minNum}" style="color: green;font-weight: bolder"></td>
                 <td th:text="${t.good_minNum }"></td>

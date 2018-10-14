@@ -17,44 +17,21 @@
     <thead>
     <tr class="text-c" >
         <td>客户姓名</td>
-        <td>还需要出库数量</td>
-        <td>商品名</td>
-        <td>创建发货通知单</td>>
+        <td>下单时间</td>
+        <td>客户邮箱</td>
+        <td>查看出货通知单</td>>
     </tr>
     </thead>
-    <tr class="text-c"  th:each=" f : ${session.orderlist}" >
+    <tr class="text-c"  th:each=" f : ${session.orderList}" >
         <td th:text="${f.cus_name}"></td>
-        <td th:text="${f.outnum}"></td>
-        <td th:text="${f.good_name}"></td>
-        <td><a href="#" th:pickUpList_volume="${f.goodChange_volume}" th:goodChange_unit="${f.goodChange_unit}"
-               th:pickUpList_weight="${f.goodChange_weight}" th:good_code="${f.good_line}"
-               th:goodSendOut_id="${f.goodChange_Code}" class="cj" >创建</a> </td>
+        <td th:text="${f.order_time}"></td>
+        <td th:text="${f.cus_email}"></td>
+        <td><a th:if="${f.num} > 0" th:href="@{/outStore/goodreachAll(order_id=${f.order_id})}">查看通知单</a>  <span th:if="${f.num} eq 0">该订单无通知单</span> </td>
     </tr>
 </table>
 
-<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content radius">
-            <form  th:action="@{/outStore/inspickUpList}" method="post">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="title">对话框标题</h3>
-                    体积 <input type="text" zs="体积" disabled="disabled" id="pickUpList_volume" name="pickUpList_volume"><br>
-                    数量 <input type="number"  name="pickUpList_num"><br>
-                    单位 <input type="text" disabled="disabled"  zs="单位" id="goodChange_unit" name="goodChange_unit"><br>
-                    货物体重 <input type="text" disabled="disabled" zs="货物体重" id="pickUpList_weight" name="pickUpList_weight"><br>
-                    条形码 <input type="text" disabled="disabled"  zs="条形码" id="good_code" name="good_code"><br>
-                    <input type="hidden" disabled="disabled" id="goodSendOut_id" zs="单id" value="" name="goodSendOut_id">
-                </div>
 
-                <div class="modal-footer">
-                    <input type="submit" value="确定"></input><br>
-                    <button class="btn" data-dismiss="modal"  aria-hidden="true">关闭</button>
-                </div>
-            </form>
-        </div>
 
-    </div>
-</div>
 
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
@@ -67,28 +44,14 @@
 <script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
 <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
 <script type="text/javascript">
-    $(function(){
-        $(".cj").click(function () {
-            var  pickUpList_volume=$(this).attr("pickUpList_volume");
-            $("#pickUpList_volume").val(pickUpList_volume);
-            var  goodChange_unit=$(this).attr("goodChange_unit");
-            $("#goodChange_unit").val(goodChange_unit);
-            var  pickUpList_weight=$(this).attr("pickUpList_weight");
-            $("#pickUpList_weight").val(pickUpList_weight);
-            var  good_code=$(this).attr("good_code");
-            $("#good_code").val(good_code);
-            var  goodSendOut_id=$(this).attr("goodSendOut_id");
-            $("#goodSendOut_id").val(goodSendOut_id);
-            modaldemo();
-        })
-    })
+
     $('.table-sort').dataTable({
         "bStateSave": true,//状态保存
         "aLengthMenu":[1,2,3,4,5,10,20],//可自行选择 每页显示条数
         "pading":false,
         "aoColumnDefs": [
             //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-            {"orderable":false,"aTargets":[0,2]}// 不参与排序的列
+            {"orderable":false,"aTargets":[0,3]}// 不参与排序的列
         ],
         "oLanguage" : { // 国际化配置
             "sProcessing" : "正在获取数据，请稍后...",

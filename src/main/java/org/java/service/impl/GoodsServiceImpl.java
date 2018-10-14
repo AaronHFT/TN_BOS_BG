@@ -156,4 +156,9 @@ public class GoodsServiceImpl implements GoodsService {
     public void checkGoodInStore(Map<String, Object> map) {
         goodsMapper.checkGoodInStore(map);
     }
+
+    @Override
+    public List<Map<String, Object>> findBadGoods() {
+        return goodsMapper.findBadGoods();
+    }
 }

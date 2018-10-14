@@ -12,65 +12,40 @@ import java.util.Map;
 public class outStoreServiceImpl implements outStoreService {
     @Autowired
     private outStoreMapper osm;
+
+
     @Override
     public List<Map<String, Object>> orderAll() {
         return osm.orderAll();
     }
 
     @Override
-    public void insgoodsent(Map<String, Object> h) {
-        osm.insgoodsent(h);
+    public List<Map<String, Object>> goodreachAll(Map<String, Object> m) {
+        return osm.goodreachAll(m);
     }
 
     @Override
-    public List<Map<String, Object>> goodsentAll() {
-        return osm.goodsentAll();
+    public void insgoodreach(Map<String, Object> m) {
+        osm.insgoodreach(m);
     }
 
     @Override
-    public void insgoodchange(Map<String, Object> h) {
-        osm.insgoodchange(h);
+    public List<Map<String, Object>> pickuplistAll() {
+        return osm.pickuplistAll();
     }
 
     @Override
-    public List<Map<String, Object>> goodchangeAll() {
-        return osm.goodchangeAll();
+    public void insgoodchange(Map<String, Object> m) {
+        osm.insgoodchange(m);
     }
 
     @Override
-    public void pickUpListins(Map<String, Object> h) {
-        osm.pickUpListins(h);
+    public Map<String, Object> onegoodreach(Map<String, Object> m) {
+        return osm.onegoodreach(m);
     }
 
     @Override
-    public List<Map<String, Object>> pickUpListAll() {
-        return osm.pickUpListAll();
+    public List<Map<String, Object>> goodchangeAll(Map<String,Object>m) {
+        return osm.goodchangeAll(m);
     }
-
-    @Override
-    public List<Map<String, Object>> goodreachAll() {
-        return osm.goodreachAll();
-    }
-
-    @Override
-    public List<Map<String, Object>> goodChange1(Map<String, Object> h) {
-        return osm.goodChange1(h);
-    }
-
-    @Override
-    public List<Map<String, Object>> goodchange2All(Map<String, Object> h) {
-        return osm.goodchange2All(h);
-    }
-
-    @Override
-    public void insgoodchange2(Map<String, Object> h) {
-        osm.insgoodchange2(h);
-    }
-
-    @Override
-    public void goodupd(Map<String, Object> h) {
-        osm.goodupd(h);
-    }
-
-
 }

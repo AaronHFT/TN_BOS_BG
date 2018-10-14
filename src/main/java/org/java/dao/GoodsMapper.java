@@ -66,4 +66,6 @@ public interface GoodsMapper {
     public void updateGoodForCheck(Map<String,Object> map);
 
     public void unitTrans(Map<String,Object> map);
+
+    public List<Map<String,Object>> findBadGoods();
 }

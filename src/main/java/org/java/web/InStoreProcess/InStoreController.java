@@ -1,9 +1,6 @@
 package org.java.web.InStoreProcess;
 
-import com.sun.mail.imap.protocol.SearchSequence;
-import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.core.util.UuidUtil;
-import org.java.service.Impl.InStoreServiceImpl;
 import org.java.service.InStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +36,6 @@ public class InStoreController {
     @RequestMapping("createGoodreach")
     public String createGoodreach(@RequestParam Map<String,Object> map,HttpSession ses){
         Map<String,Object> user= (Map<String,Object>) ses.getAttribute("user");       //获取当前登录的用户
-        System.out.println("----------进入了创建的方法");
         String userid=user.get("sys_user_id").toString();
         ses.setAttribute("userid",userid);
         map.put("userId",userid);
@@ -53,17 +49,10 @@ public class InStoreController {
         //查询出已确认但未制定计划的的订单信息
         if (name.equals("makeplan")){
             List<Map<String,Object>> planlist=inStoreService.checkPlan();
-            for(Map<String,Object> map:planlist){
-                System.out.println(map);
-            }
             ses.setAttribute("list",planlist);
         }else {
-            System.out.println("--------------------");
             //查询出未确认但已制定计划的订单信息
             List<Map<String,Object>> orderlist=inStoreService.checkStore();
-            for(Map<String,Object> map:orderlist){
-                System.out.println(map);
-            }
             ses.setAttribute("list",orderlist);
         }
         ses.setAttribute("name",name);
@@ -90,9 +79,6 @@ public class InStoreController {
          String goodcheckid = UuidUtil.getTimeBasedUuid().toString();
          ses.setAttribute("checkid",goodcheckid);
          //获取当前登录人员的账号
-         //String user=ses.getAttribute("loginer").toString();
-         String user="48b3092d-1b2c-1037-9b87-886b7f3db4cd";
-         ses.setAttribute("user",user);
          String checkdate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
          ses.setAttribute("checkdate",checkdate);
         return "/goodin/checkGood";
@@ -110,7 +96,6 @@ public class InStoreController {
     //创建收货单
     @RequestMapping("createGoodAccept")
     public String createGoodAccept(@RequestParam Map<String,Object> map){
-        System.out.println(map);
         inStoreService.createGoodAccept(map);
         //收货完成后,将订单的状态更改为已收货
         String orderid=map.get("orderid").toString();
@@ -137,7 +122,6 @@ public class InStoreController {
     //制定入库计划,跳转到制定入库计划页面
     @RequestMapping("makePlan")
     public String makePlan(HttpSession ses, String gid,String state){
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>");
         ses.setAttribute("state",state);
         List<Map<String,Object>> types =inStoreService.getInStoreTypes();
         ses.setAttribute("types",types);
@@ -204,7 +188,6 @@ public class InStoreController {
     @ResponseBody
     public Map<String,Object> goodChange(HttpServletRequest req,HttpSession ses){
         String orderid=req.getParameter("oid");
-        System.out.println(">>>>>>>>>>>>>>>>"+orderid);
         Map<String,Object> map=inStoreService.getOrderinfo(orderid);
         ses.setAttribute("orderinfo",map);
         List<Map<String,Object>> stores=inStoreService.getstorelist();
@@ -213,7 +196,12 @@ public class InStoreController {
         map.put("storeRegion",storeRegion);
         List<Map<String,Object>> storePosition=inStoreService.getStorePosition();
         map.put("storePosition",storePosition);
-        System.out.println(map);
+        //生成入库编号
+        String changeid=System.currentTimeMillis()+"";
+        map.put("changeid", changeid);
+        //生成条形码
+        String goodline=map.get("goodCheck_goodCode").toString()+changeid;
+        map.put("goodline", goodline);
         return map;
     }
 
@@ -265,6 +253,7 @@ public class InStoreController {
             map.put("acceptcode",acceptcode);
             inStoreService.goodInstore(map);
         }else {
+            System.out.println(">>>>>>>>>>>>>添加到good表");
             //新建在库货品的信息,添加到在库货品中
             Map<String,Object> goodAdd=new HashMap<String,Object>();
             goodAdd.put("position",position);
@@ -313,7 +302,6 @@ public class InStoreController {
     public String showCheckGoodInfo(HttpServletRequest req,HttpSession ses){
         String checkid=req.getParameter("gid");
         Map<String,Object> checkinfo=inStoreService.findCheckgoodByid(checkid);
-        System.out.println("验收记录为>>>>>>>>>>>"+checkinfo);
         ses.setAttribute("checkinfo",checkinfo);
         return "/goodin/showCheckDetail";
     }
@@ -376,12 +364,13 @@ public class InStoreController {
         //获取当前登录人员的id
         Map<String,Object> user=(Map<String,Object>)ses.getAttribute("user");
         String userid=user.get("sys_user_id").toString();
+        ses.setAttribute("userId", userid);
+        ses.setAttribute("username", user.get("sys_user_username"));
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("orderid",orderid);
         map.put("userid",userid);
         Map<String,Object> checkMap=inStoreService.IsChecked(map);
         if (checkMap!=null){
-            System.out.println(">>>>>>>>>>>>>>>>>>>进入判断");
             //若查询记录不为空,则说明当前人员已经验收此订单,则返回false禁止重复验收
             return "False";
         }else {

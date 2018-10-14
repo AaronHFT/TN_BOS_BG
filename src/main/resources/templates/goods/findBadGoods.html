@@ -6,44 +6,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
+
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui/css/H-ui.min.css}" href="#" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/H-ui.admin.css}" href="#" />
     <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
-    <title>Title</title>
+
+    <title>查询库存</title>
 </head>
 <body>
-<table  class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
-    <thead>
-    <tr class="text-c" >
-        <td>客户姓名</td>
-        <td>下单时间</td>
-        <td>是否结账</td>
-    </tr>
-    </thead>
-    <tr class="text-c"  th:each=" f : ${session.flist}" >
-        <td th:text="${f.cus_name}"></td>
-        <td th:text="${f.order_time}"></td>
-        <td>[[${f.ispayment}]]<span> <a class="bbb" th:href="@{/finance/ckxq(id=${f.order_id})}" th:ccc="${f.id}"  th:bbb="${f.order_id}"  th:if="${f.ispayment} eq '未结账'" >查看详情</a> </span></td>
-    </tr>
-</table>
-<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content radius">
-            <div class="modal-header">
-                <h3 class="modal-title" id="title">对话框标题</h3>
-                <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-
-                <button class="btn btn-primary">确定</button>
-                <button class="btn" data-dismiss="modal" onclick="gb()" aria-hidden="true">关闭</button>
-            </div>
-        </div>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>货物管理 <span class="c-gray en">&gt;</span>报废查询 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div>
+    <div>
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+            <thead>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" name="good" value=""></th>
+                <th width="120">货物名称</th>
+                <th width="120">货物代码</th>
+                <th width="120">规格</th>
+                <th width="120">数量</th>
+                <th width="120">单位</th>
+                <th width="120">货物总重量</th>
+                <th width="120">货物总体积</th>
+                <th width="120">等级</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c" th:each=" t:${list}">
+                <td><input type="checkbox" value="" name="good" th:value="${t.good_id }"></td>
+                <td th:text="${t.good_name }"></td>
+                <td th:text="${t.good_code }"></td>
+                <td th:text="${t.good_standard }"></td>
+                <td th:text="${t.goodChange_num }"></td>
+                <td th:text="${t.good_unit }"></td>
+                <td th:text="${t.good_weight }"></td>
+                <td th:text="${t.good_volume }"></td>
+                <td th:text="${t.good_level }"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <!--_footer 作为公共模版分离出去-->
@@ -57,26 +60,14 @@
 <script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="#"></script>
 <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
 <script type="text/javascript">
-    $(function(){
-$(".bbb").click(function(){
-    var vv=$(this).attr("ccc");
-    $.post("ajaxid",{"ajaxid":vv},function(res){
 
-    })
-
-    }
-)
-
-
-
-    })
     $('.table-sort').dataTable({
         "bStateSave": true,//状态保存
         "aLengthMenu":[1,2,3,4,5,10,20],//可自行选择 每页显示条数
         "pading":false,
         "aoColumnDefs": [
             //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-            {"orderable":false,"aTargets":[0,2]}// 不参与排序的列
+            {"orderable":false,"aTargets":[0,6]}// 不参与排序的列
         ],
         "oLanguage" : { // 国际化配置
             "sProcessing" : "正在获取数据，请稍后...",
@@ -96,28 +87,6 @@ $(".bbb").click(function(){
             }
         }
     });
-    /*总费用*/
-    function sum_menty(){
-        var vv=$(this).attr("ccc");
-        $.post("ajaxid",{"ajaxid":vv},function(res){
-            alert(res)
-        })
-        var orderid=$(this).attr("bbb");
-        var v=$(this).attr("bbb")
-        zf(orderid)
-        modaldemo()
-    }
-    /*关闭*/
-    function gb() {
-   window.location.href="/finance/wjs";
-    }
-    /*显示支付二维码*/
-    function zf(){
-
-
-
-
-    }
 
     /*资讯-添加*/
     function article_add(title,url,w,h){
@@ -131,9 +100,6 @@ $(".bbb").click(function(){
     /*资讯-编辑*/
     function article_edit(title,url,id,w,h){
         layer_show(title,url,w,h);
-    }
-    function modaldemo(){
-        $("#modal-demo").modal("show")
     }
 
 

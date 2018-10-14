@@ -59,7 +59,6 @@ http://api.map.baidu.com/api?v=2.0&ak=gNzyyyVVgseNwU31EXAttganmDLTjY64-->
         // 百度地图API功能
         // var starting = $('#starting').text();
         // var downtown = $('#downtown').text();
-
         var map = new BMap.Map("l-map");
         map.centerAndZoom(new BMap.Point(116.404, 39.915), 12);
         // var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
@@ -98,7 +97,6 @@ http://api.map.baidu.com/api?v=2.0&ak=gNzyyyVVgseNwU31EXAttganmDLTjY64-->
                     var downtown =$('#downtown').text();
                     var map = new BMap.Map("l-map");
                     var output = "从"+starting+"到"+downtown+"驾车需要";
-                    alert(output);
                     var output1="";
                     var output2="总路程为 ";
                     var output3="";
@@ -120,8 +118,8 @@ http://api.map.baidu.com/api?v=2.0&ak=gNzyyyVVgseNwU31EXAttganmDLTjY64-->
                             },"1000");
                         }});
                     transit.search(starting, downtown);
-                    var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
-                    driving.search(starting, downtown);
+                    // var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+                    // driving.search(starting, downtown);
                 }, "JSON");
             })
         })

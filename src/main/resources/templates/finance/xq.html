@@ -43,7 +43,7 @@
     </tr>
 
 </table>
-<h2 id="fs"><a href="javascript:void(0)"  th:ccc="${session.ckf[0].order_id}" id="bbb" th:if="${session.kjs.kjs} <= 0" >该订单已经完成可以向用户发送收款邮件</a> <span th:if="${session.kjs.kjs} > 0">该订单还未完成</span> </h2>
+<h2 id="fs"><a href="javascript:void(0)"  th:ccc="${session.ckf[0].Order_id}" id="bbb"  >该订单已经完成可以向用户发送收款邮件</a>  </h2>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
 <script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
@@ -59,7 +59,8 @@
 $("#bbb").click(function(){
     var vvv=$(this).attr("ccc");
     $.post("http://120.78.142.80/myPay/appid_create_order",{"payTo":"AliPay","appId":"XVCNcCNrVgX57D74FE80E77F50AE8383","playerId":"sVCNeCNuVTsF809995DA27B6B7B3D7D5","goodsId":"001" },function(res){
-    },"JSON")
+    alert(res.msg)
+        },"JSON")
     $.post("/finance/ajaxid2",{"img":"d:/tpzy/api.png","orderid":vvv},function(res){
     alert("付款邮件已发送")
         $("#fs").html("付款邮件已发送")

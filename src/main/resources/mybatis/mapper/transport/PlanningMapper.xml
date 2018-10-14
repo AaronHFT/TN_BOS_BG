@@ -79,7 +79,7 @@ AND o.order_state='调度运输'
     <select id="distrbution_gps" resultType="m">
         SELECT * FROM `order` o,webnodes w,goodreach g,store s,pilot p,truck t
 WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
-AND o.order_state='调度运输' AND t.truck_id=g.truck_id AND p.pilot_id=g.pilot_id
+AND o.order_state='调度运输完' AND t.truck_id=g.truck_id AND p.pilot_id=g.pilot_id
     </select>
 
 
@@ -87,7 +87,7 @@ AND o.order_state='调度运输' AND t.truck_id=g.truck_id AND p.pilot_id=g.pilo
     <select id="planning_GPSsel" resultType="m">
         SELECT * FROM `order` o,webnodes w,goodreach g,store s,pilot p,truck t
 WHERE o.store_id=s.store_id AND w.webNodes_id=o.webnodes_id AND g.order_id=o.order_id
-AND o.order_state='调度运输' AND t.truck_id=g.truck_id AND p.pilot_id=g.pilot_id AND o.order_id=#{order_id}
+AND o.order_state='调度运输完' AND t.truck_id=g.truck_id AND p.pilot_id=g.pilot_id AND o.order_id=#{order_id}
     </select>
 
     <!--修改运输状态-->

@@ -37,6 +37,7 @@
                 <th width="150">入库日期</th>
                 <th width="150">生产日期</th>
                 <th width="150">保质期</th>
+                <th width="60">等级</th>
                 <th width="120">操作</th>
             </tr>
             </thead>
@@ -58,6 +59,7 @@
                 <td th:text="${#dates.format(t.goodChange_producedDate,'yyyy-MM-dd') }"></td>
                 <td th:text="${#dates.format(t.goodChange_secureDate,'yyyy-MM-dd') }" th:if="${t.goodChange_secureDate >= #dates.createNow()}" style="color: green;font-weight: bolder"></td>
                 <td th:text="${#dates.format(t.goodChange_secureDate,'yyyy-MM-dd') }" th:if="${t.goodChange_secureDate < #dates.createNow()}" style="color: red;font-weight: bolder"></td>
+                <td th:text="${t.goodChange_lv }"></td>
                 <td>
                     <a href="javascript:void(0)">退货出库</a>
                     <a href="javascript:void(0)" th:onclick="'uselessOut(\''+${t.good_line }+'\',\''+${t.good_id }+'\')'">
