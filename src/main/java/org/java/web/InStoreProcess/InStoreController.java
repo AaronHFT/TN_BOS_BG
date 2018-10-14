@@ -38,9 +38,10 @@ public class InStoreController {
      */
     @RequestMapping("createGoodreach")
     public String createGoodreach(@RequestParam Map<String,Object> map,HttpSession ses){
-        //String userid= (String) ses.getAttribute("userid");       //获取当前登录的用户
+        Map<String,Object> user= (Map<String,Object>) ses.getAttribute("user");       //获取当前登录的用户
         System.out.println("----------进入了创建的方法");
-        String userid="48b3092d-1b2c-1037-9b87-886b7f3db4cd";
+        String userid=user.get("sys_user_id").toString();
+        ses.setAttribute("userid",userid);
         map.put("userId",userid);
         inStoreService.createCheckreach(map);
         return "/goodin/checkGoodreach";
@@ -69,18 +70,31 @@ public class InStoreController {
         return "/goodin/checkStore";
     }
 
+    //跳转到已到货订单的信息显示页面
+    @RequestMapping("showArriveGood")
+    public String showArriveGood(HttpSession ses){
+        //查询所有已经到货未验收的订单信息
+        List<Map<String,Object>> arriveGoodinfo=inStoreService.showArriveGood();
+        ses.setAttribute("arriveGoodinfo",arriveGoodinfo);
+        return "/goodin/showArriveGood";
+    }
+
     //传值跳转到货物盘点验收页面
     @RequestMapping("checkGood")
-    public String checkGood(HttpSession ses){
-        //生成货物验收单编号
-        String goodcheckid = UuidUtil.getTimeBasedUuid().toString();
-        ses.setAttribute("checkid",goodcheckid);
-        //获取当前登录人员的账号
-        //String user=ses.getAttribute("loginer").toString();
-        String user="48b3092d-1b2c-1037-9b87-886b7f3db4cd";
-        ses.setAttribute("user",user);
-        String checkdate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        ses.setAttribute("checkdate",checkdate);
+    public String checkGood(HttpSession ses,HttpServletRequest req){
+        //创建验收单之前查询出对应订单的收货通知单信息
+        String orderid=req.getParameter("oid");
+         Map<String,Object> goodreachinfo=inStoreService.getgoodreachinfo(orderid);
+         ses.setAttribute("goodreachinfo",goodreachinfo);
+         //生成货物验收单编号
+         String goodcheckid = UuidUtil.getTimeBasedUuid().toString();
+         ses.setAttribute("checkid",goodcheckid);
+         //获取当前登录人员的账号
+         //String user=ses.getAttribute("loginer").toString();
+         String user="48b3092d-1b2c-1037-9b87-886b7f3db4cd";
+         ses.setAttribute("user",user);
+         String checkdate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+         ses.setAttribute("checkdate",checkdate);
         return "/goodin/checkGood";
     }
 
@@ -89,19 +103,8 @@ public class InStoreController {
     public String checkedgood(@RequestParam Map<String,Object> map){
         inStoreService.createCheckGood(map);
         String orderid=map.get("orderid").toString();
-        Map<String,Object> orderinfo=inStoreService.findOrderByid(orderid);
-        String state=orderinfo.get("order_state").toString();
         inStoreService.editOrderCheck(orderid);
-        return "redirect:/Instore/checkGood";
-    }
-
-    //跳转到收货单页面
-    @RequestMapping("goodAccept")
-    public String goodAccept(HttpSession ses){
-        //生成入库计划单编号
-        String acceptid = UuidUtil.getTimeBasedUuid().toString();
-        ses.setAttribute("acceptid",acceptid);
-        return "/goodin/goodAccept";
+        return "redirect:/Instore/showArriveGood";
     }
 
     //创建收货单
@@ -109,7 +112,10 @@ public class InStoreController {
     public String createGoodAccept(@RequestParam Map<String,Object> map){
         System.out.println(map);
         inStoreService.createGoodAccept(map);
-        return "redirect:/Instore/goodAccept";
+        //收货完成后,将订单的状态更改为已收货
+        String orderid=map.get("orderid").toString();
+        inStoreService.editOrderAccept(orderid);
+        return "redirect:/Instore/showGoodChecked";
     }
 
     //确认到货
@@ -128,7 +134,7 @@ public class InStoreController {
         return "/goodin/checkStore";
     }
 
-    //制定入库计划,跳转到指定入库计划页面
+    //制定入库计划,跳转到制定入库计划页面
     @RequestMapping("makePlan")
     public String makePlan(HttpSession ses, String gid,String state){
         System.out.println(">>>>>>>>>>>>>>>>>>>>>");
@@ -175,7 +181,12 @@ public class InStoreController {
         ses.setAttribute("goodinfo",goodinfo);
         List<Map<String,Object>> stores=inStoreService.getstorelist();
         ses.setAttribute("stores",stores);
-        return "/goodin/createOrderPlan";
+
+        //查询出未确认但已制定计划的订单信息
+        List<Map<String,Object>> orderlist=inStoreService.checkStore();
+        ses.setAttribute("list",orderlist);
+        ses.setAttribute("name","makeplan");
+        return "/goodin/checkStore";
     }
 
     //跳转到库位分配
@@ -326,6 +337,56 @@ public class InStoreController {
         String checkid=req.getParameter("gid");
         inStoreService.delGoodcheck(checkid);
         return "redirect:/Instore/showCheckGood";
+    }
+
+    //扫码枪扫描订单id查询出对应的信息,通过json回显到页面
+    @RequestMapping("searchOrderinfo")
+    @ResponseBody
+    public Map<String,Object> searchOrderinfo(HttpServletRequest req){
+        String orderid=req.getParameter("orderid");
+        Map<String,Object> map = inStoreService.searchOrderinfo(orderid);
+        return map;
+    }
+
+    //查询已验收状态的订单信息
+    @RequestMapping("showGoodChecked")
+    public String showGoodChecked(HttpSession ses){
+        List<Map<String,Object>> showGoodChecked=inStoreService.showGoodChecked();
+        ses.setAttribute("showGoodChecked",showGoodChecked);
+        return "/goodin/showGoodCheck";
+    }
+
+    //通过对应的订单查询出货物验收单的信息,传值到收货单页面
+    @RequestMapping("acceptGood")
+    public String acceptGood(HttpSession ses,HttpServletRequest req){
+        String orderid=req.getParameter("oid");
+        Map<String,Object> map=inStoreService.acceptGood(orderid);
+        ses.setAttribute("map",map);
+        //生成收获单编号
+        String acceptid = UuidUtil.getTimeBasedUuid().toString();
+        ses.setAttribute("acceptid",acceptid);
+        return "/goodin/goodAccept";
+    }
+
+    //验收前判断当前人员是否已经验收过,若已经验收过，返回false禁止当前人员重复验收
+    @RequestMapping("IsChecked")
+    @ResponseBody
+    public String IsChecked(HttpSession ses,HttpServletRequest req){
+        String orderid=req.getParameter("oid");
+        //获取当前登录人员的id
+        Map<String,Object> user=(Map<String,Object>)ses.getAttribute("user");
+        String userid=user.get("sys_user_id").toString();
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("orderid",orderid);
+        map.put("userid",userid);
+        Map<String,Object> checkMap=inStoreService.IsChecked(map);
+        if (checkMap!=null){
+            System.out.println(">>>>>>>>>>>>>>>>>>>进入判断");
+            //若查询记录不为空,则说明当前人员已经验收此订单,则返回false禁止重复验收
+            return "False";
+        }else {
+            return "OK";
+        }
     }
 
 }

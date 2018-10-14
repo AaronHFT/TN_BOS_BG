@@ -230,4 +230,46 @@ public class InStoreServiceImpl implements InStoreService {
     public void delGoodcheck(String goodcheckid) {
         inStoremapper.delGoodcheck(goodcheckid);
     }
+
+    //扫码枪扫描订单id查询出对应的信息,通过json回显到页面
+    @Override
+    public Map<String, Object> searchOrderinfo(String orderid) {
+        return inStoremapper.searchOrderinfo(orderid);
+    }
+
+    //创建验收单之前查询出对应订单的收货通知单信息
+    @Override
+    public Map<String, Object> getgoodreachinfo(String orderid) {
+        return inStoremapper.getgoodreachinfo(orderid);
+    }
+
+    //查询所有已到货的订单信息
+    @Override
+    public List<Map<String, Object>> showArriveGood() {
+        return inStoremapper.showArriveGood();
+    }
+
+    //查询所有已验收的订单信息
+    @Override
+    public List<Map<String, Object>> showGoodChecked() {
+        return inStoremapper.showGoodChecked();
+    }
+
+    //创建收货单之前查询出对应订单的验收单信息
+    @Override
+    public Map<String, Object> acceptGood(String orderid) {
+        return inStoremapper.acceptGood(orderid).get(0);
+    }
+
+    ////查询当前人员是否已经验收过当前订单
+    @Override
+    public Map<String, Object> IsChecked(Map<String, Object> map) {
+        return inStoremapper.IsChecked(map);
+    }
+
+    //收货后将订单的状态更改为已收货
+    @Override
+    public void editOrderAccept(String orderid) {
+        inStoremapper.editOrderAccept(orderid);
+    }
 }

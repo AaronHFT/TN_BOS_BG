@@ -26,84 +26,80 @@
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>货主编号：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="cusid">
+            <input type="text" class="input-text" th:value="${session.map.client_id}" name="cusid" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>货车编号：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="truckid">
+            <input type="text" class="input-text" th:value="${session.map.truck_id}" name="truckid" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>驾驶员编号：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="pilotid">
+            <input type="text" class="input-text" th:value="${session.map.pilot_id}" name="pilotid" readonly>
         </div>
     </div>
 
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>订单号：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="orderid">
+            <input type="text" class="input-text" th:value="${session.map.order_id}" name="orderid" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>货品名称：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="goodname">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_goodName}" name="goodname" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>货物代码：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="goodcode">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_goodCode}" name="goodcode" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>规格：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="standard">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_standard}" name="standard" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>货品等级：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <select class="select" name="goodlevel">
-                <option value="请选择">请选择</option>
-                <option th:text="正品" th:value="正品"></option>
-                <option th:text="次品" th:value="次品"></option>
-            </select>
+            <input type="text" class="input-text" th:value="${session.map.goodCkeck_level}" name="goodlevel" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>通知数量：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="exceptnum">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_ExceptNum}" name="exceptnum" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>实际数量：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="realnum">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_RealNum}" name="realnum" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>接收数量：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="acceptnum">
+            <input type="text" class="input-text" th:value="${session.map.goodCkeck_acceptNum}" name="acceptnum" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>破损数量：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="destorynum">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_destroyNum}" name="destorynum" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>搁置数量：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="laynum">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_layNum}" name="laynum" readonly>
         </div>
     </div>
     <div class="row cl">
@@ -111,7 +107,7 @@
         <div class="formControls col-xs-8 col-sm-9">
             <input type="text"
                    onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })"
-                   name="producedate" class="input-text Wdate">
+                   name="producedate" class="input-text Wdate" th:value="${session.map.goodCheck_producedDate}" readonly>
         </div>
     </div>
     <div class="row cl">
@@ -119,25 +115,25 @@
         <div class="formControls col-xs-8 col-sm-9">
             <input type="text"
                    onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })"
-                   name="securdate" class="input-text Wdate">
+                   name="securdate" class="input-text Wdate" th:value="${session.map.goodCheck_secureDate}" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>货物重量：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="weight">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_weight}" name="weight" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>货物体积：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="volume">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_volume}" name="volume" readonly>
         </div>
     </div>
     <div class="row cl">
         <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>单位：</label>
         <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" name="unit">
+            <input type="text" class="input-text" th:value="${session.map.goodCheck_unit}" name="unit" readonly>
         </div>
     </div>
     <div class="row cl">

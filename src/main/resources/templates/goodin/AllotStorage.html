@@ -36,7 +36,8 @@
             <td th:text="${l.goodReach_goodName }"></td>
             <td th:text="${l.plan_time}"></td>
             <td>
-                <a href="javascript:void(0);" th:onclick="'showGoodChange('+this+',\''+${l.order_id}+'\')'" class="btn btn-danger radius">订单入库</a>
+                <a th:if="${l.goodAccept_handleNum==l.goodAccept_destroyNum}" href="javascript:void(0);" th:onclick="'showGoodChange('+this+',\''+${l.order_id}+'\')'" class="btn btn-danger radius">订单入库</a>
+                <a th:if="${l.goodAccept_handleNum!=l.goodAccept_destroyNum}" href="javascript:void(0);" class="btn btn-danger radius" style="background-color: darkgray">订单入库</a>
             </td>
         </tr>
         </c:forEach>

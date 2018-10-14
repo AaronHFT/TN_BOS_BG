@@ -64,4 +64,18 @@ public interface InStoreService {
     public void editOrderFail(String orderid);
 
     public void delGoodcheck(String goodcheckid);
+
+    public Map<String,Object> searchOrderinfo(String orderid);
+
+    public Map<String,Object> getgoodreachinfo(String orderid);
+
+    public List<Map<String,Object>> showArriveGood();
+
+    public List<Map<String,Object>> showGoodChecked();
+
+    public Map<String,Object> acceptGood(String orderid);
+
+    public Map<String,Object> IsChecked(Map<String,Object> map);
+
+    public void editOrderAccept(String orderid);
 }

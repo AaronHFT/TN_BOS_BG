@@ -52,7 +52,7 @@ WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id AND g.go
 
     <insert id="createGoodAccept" parameterType="map">
         insert into goodaccept
-        values(null,#{acceptcode},#{cusid},#{truckid},#{pilotid},#{orderid},#{goodname},#{goodcode},#{standard},#{goodlevel},#{exceptnum},#{realnum},#{acceptnum},#{destorynum},#{laynum},null,#{producedate},#{securdate},#{weight},#{volume},#{unit})
+        values(null,#{acceptcode},#{cusid},#{truckid},#{pilotid},#{orderid},#{goodname},#{goodcode},#{standard},#{goodlevel},#{exceptnum},#{realnum},#{acceptnum},#{destorynum},#{laynum},0,#{producedate},#{securdate},#{weight},#{volume},#{unit})
     </insert>
 
     <select id="showStores" resultType="map">
@@ -61,10 +61,11 @@ WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id AND g.go
     </select>
 
     <select id="showAllcheckOrder" resultType="map">
-        SELECT * FROM goodreach g,`order` o,customer c,contacts t,tn_bos_entryorder b
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t,tn_bos_entryorder b,goodaccept pt
 WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
 AND b.goodReach_id=g.goodReach_id
-AND o.order_state='已验收'
+AND pt.order_id=g.order_id
+AND o.order_state='已收货'
     </select>
 
     <update id="checkStoretrue" parameterType="String">
@@ -77,7 +78,7 @@ WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id AND i.in
 AND k.order_id=o.order_id
 AND b.goodReach_id=g.goodReach_id
 AND e.order_id=o.order_id
-AND o.order_state='已验收'
+AND o.order_state='已收货'
 AND o.order_id=#{orderid}
     </select>
 
@@ -145,5 +146,44 @@ AND goodCheck_id=#{goodcheckid}
     <delete id="delGoodcheck" parameterType="String">
         delete from goodcheck where goodCheck_id=#{goodcheckid}
     </delete>
+
+    <select id="searchOrderinfo" resultType="map" parameterType="String">
+        SELECT * FROM goodreach g,`order` o
+WHERE g.order_id=o.order_id
+AND o.order_id=#{orderid}
+    </select>
+
+    <select id="getgoodreachinfo" resultType="map" parameterType="String">
+        select * from goodreach g,`order` o
+        where g.order_id=o.order_id
+        and o.order_id=#{orderid}
+    </select>
+
+    <select id="showArriveGood" resultType="m">
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t
+WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
+and o.order_state in ('已到货','验收中')
+    </select>
+
+    <select id="showGoodChecked" resultType="m">
+        SELECT * FROM goodreach g,`order` o,customer c,contacts t
+WHERE g.order_id=o.order_id AND c.cus_id=t.cus_id AND o.con_id=t.con_id
+and o.order_state='已验收'
+    </select>
+
+    <select id="acceptGood" resultType="map" parameterType="String">
+        SELECT * FROM goodcheck g,`order` o
+WHERE g.order_id=o.order_id
+    </select>
+
+    <select id="IsChecked" parameterType="map" resultType="map">
+        SELECT * FROM goodcheck
+WHERE order_id=#{orderid}
+AND goodCheck_managerId=#{userid}
+    </select>
+
+    <update id="editOrderAccept" parameterType="String">
+        update `order` set order_state='已收货' where order_id=#{orderid}
+    </update>
 
 </mapper>

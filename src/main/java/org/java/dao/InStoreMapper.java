@@ -102,4 +102,25 @@ public interface InStoreMapper {
 
     //将验收失败对应的记录删除
     public void delGoodcheck(@Param("goodcheckid") String goodcheckid);
+
+    //扫码枪扫描订单id查询出对应的信息,通过json回显到页面
+    public Map<String,Object> searchOrderinfo(@Param("orderid") String orderid);
+
+    //创建验收单之前查询出对应订单的收货通知单信息
+    public Map<String,Object> getgoodreachinfo(@Param("orderid") String orderid);
+
+    //查询所有已到货的订单信息
+    public List<Map<String,Object>> showArriveGood();
+
+    //查询所有已验收的订单信息
+    public List<Map<String,Object>> showGoodChecked();
+
+    //创建收货单之前查询出对应订单的验收单信息
+    public List<Map<String,Object>> acceptGood(@Param("orderid") String orderid);
+
+    //查询当前人员是否已经验收过当前订单
+    public Map<String,Object> IsChecked(Map<String,Object> map);
+
+    //收货后将订单的状态更改为已收货
+    public void editOrderAccept(@Param("orderid") String orderid);
 }
