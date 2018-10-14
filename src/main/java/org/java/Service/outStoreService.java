@@ -1,21 +1,20 @@
-package org.java.Service;
+package org.java.service;
 
-import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface outStoreService {
-    public List<HashMap<String,Object>> orderAll();
-    public void insgoodsent(HashMap<String,Object>h);
-    public List<HashMap<String,Object>> goodsentAll();
-    public  void insgoodchange(HashMap<String,Object>h);
-    public List<HashMap<String,Object>> goodchangeAll();
-    public  void pickUpListins(HashMap<String,Object>h);
-    public  List<HashMap<String,Object>> pickUpListAll();
-    public List<HashMap<String,Object>> goodreachAll();
-    public  List<HashMap<String,Object>> goodChange1(HashMap<String,Object>h);
-    public  List<HashMap<String,Object>> goodchange2All(HashMap<String,Object>h);
-    public  void insgoodchange2(HashMap<String,Object>h);
-    public  void goodupd(HashMap<String,Object>h);
+    public List<Map<String,Object>> orderAll();
+    public void insgoodsent(Map<String,Object>h);
+    public List<Map<String,Object>> goodsentAll();
+    public  void insgoodchange(Map<String,Object>h);
+    public List<Map<String,Object>> goodchangeAll();
+    public  void pickUpListins(Map<String,Object>h);
+    public  List<Map<String,Object>> pickUpListAll();
+    public List<Map<String,Object>> goodreachAll();
+    public  List<Map<String,Object>> goodChange1(Map<String,Object>h);
+    public  List<Map<String,Object>> goodchange2All(Map<String,Object>h);
+    public  void insgoodchange2(Map<String,Object>h);
+    public  void goodupd(Map<String,Object>h);
 }

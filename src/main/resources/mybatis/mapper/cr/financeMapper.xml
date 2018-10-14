@@ -54,8 +54,8 @@ FROM goodchange g1,good gd
 WHERE g1.order_id=#{id} AND g1.state=1 AND g1.goodChange_goodId=gd.good_Id
     </select>
     <select id="kjs" parameterType="map" resultType="map">
-        SELECT (SELECT SUM(goodChange_num) FROM goodchange WHERE state=0 AND order_id=#{id})
--(SELECT SUM(goodChange_num) FROM goodchange WHERE state=1 AND order_id=#{id} ) 'kjs'
+        SELECT ifnull( (SELECT SUM(goodChange_num) FROM goodchange WHERE state=0 AND order_id=#{id})
+-(SELECT SUM(goodChange_num) FROM goodchange WHERE state=1 AND order_id=#{id} ) ,5) 'kjs'
     </select>
     <select id="ddxx" parameterType="map" resultType="map">
         SELECT *

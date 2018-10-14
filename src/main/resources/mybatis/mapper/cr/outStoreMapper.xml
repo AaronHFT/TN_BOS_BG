@@ -35,9 +35,9 @@ SELECT *
 FROM pickUpList
     </select>
     <select id="goodreachAll" resultType="map">
-    SELECT *,(SELECT COUNT(*) FROM pickuplist pl WHERE pl.goodSendOut_id=gr.goodReach_id ) 'num'
-FROM goodreach gr,good gd,`order` o,customer c
-WHERE gr.goodReach_goodCode=gd.good_code AND gr.order_id=o.order_id AND o.cus_id=c.cus_id
+SELECT *,(SELECT COUNT(*) FROM pickuplist pl WHERE pl.goodSendOut_id=gr.goodReach_id ) 'num'
+FROM goodreach gr,`order` o,customer c
+WHERE  gr.order_id=o.order_id AND o.cus_id=c.cus_id AND gr.goodReach_code LIKE '1%'
     </select>
     <select id="goodChange1" parameterType="map" resultType="map">
         SELECT *,(SELECT r.order_id FROM goodReach r WHERE r.goodReach_id=#{id} ) "orderid",

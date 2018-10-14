@@ -11,68 +11,39 @@
     <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="#" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/skin/default/skin.css}" href="#" id="skin" />
     <link rel="stylesheet" type="text/css" th:href="@{/huistatic/h-ui.admin/css/style.css}" href="#" />
+    <title>Title</title>
 </head>
 <body>
-<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
     <thead>
-    <tr class="text-c" >
-        <td>客户姓名</td>
-        <td>生产日期</td>
-        <td>保质期</td>>
+    <tr  class="text-c">
+        <td>出入库时间</td>
+        <td>物品名称</td>
         <td>数量</td>
-        <td>单位</td>
         <td>重量</td>
-        <td>体积</td>
-        <td>创建检货清单表</td>
+        <td>应付金额</td>
+        <td>类别</td>
     </tr>
     </thead>
-    <tr class="text-c"  th:each=" f : ${session.goodchangelist}" >
-        <td th:text="${f.cus_name}"></td>
-        <td th:text="${f.goodReach_producedDate}"></td>
-        <td th:text="${f.goodReach_secureDate}"></td>
-        <td th:text="${f.goodReach_ExceptNum }"></td>
-        <td th:text="${f.goodReach_unit}"></td>
-        <td th:text="${f.goodReach_weight}"></td>
-        <td th:text="${f.goodReach_volume}"></td>
-
-        <td><a href="#" th:if="${f.num} eq 0" th:href="@{/outStore/inspickUpList(
-        goodSendOut_id=${f.goodReach_id},
-        pickUpList_volume=${f.goodReach_volume},
-        pickUpList_num=${f.goodReach_ExceptNum},
-        goodChange_unit=${f.goodReach_unit},
-        pickUpList_weight=${f.goodReach_weight},
-        good_code=${f.goodReach_goodCode}
-        )}" th:goodChange_id="${f.goodReach_id}" >创建</a>
-            <a th:href="@{/outStore/pickUpListAll}" th:if="${f.num} > 0">查看</a>
-        </td>
+    <tr th:each="f: ${session.rkf}" class="text-c">
+        <td>[[${f.goodChange_inTime}]]</td>
+        <td>[[${f.good_name}]]</td>
+        <td>[[${f.goodChange_num}]]</td>
+        <td>[[${f.goodChange_weight}]]</td>
+        <td>[[${f.rkf}]]</td>
+        <td>入库</td>
     </tr>
+    <tr th:each="f: ${session.ckf}" class="text-c">
+        <td>[[${f.goodChange_inTime}]]</td>
+        <td>[[${f.good_name}]]</td>
+        <td>[[${f.goodChange_num}]]</td>
+        <td>[[${f.goodChange_weight}]]</td>
+        <td>[[${f.ckf}]]</td>
+        <td>出库</td>
+    </tr>
+
 </table>
-<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content radius">
-            <form  th:action="@{/outStore/inspickUpList}" method="post">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="title">对话框标题</h3>
-                    体积 <input type="text" name="pickUpList_volume"><br>
-                    数量 <input type="number" name="pickUpList_num"><br>
-                    单位 <input type="text" name="goodChange_unit"><br>
-                    货物体重 <input type="text" name="pickUpList_weight"><br>
-                    条形码 <input type="text" name="good_code"><br>
-                    <input type="hidden" id="goodChange_id" value="" name="goodSendOut_id">
-                </div>
-
-                <div class="modal-body">
-                    <img src="" alt="" id="img" /><br>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" value="确定"></input><br>
-                    <button class="btn" data-dismiss="modal"  aria-hidden="true">关闭</button>
-                </div>
-            </form>
-        </div>
-
-    </div>
-</div>
+<h2 id="fs"><a href="javascript:void(0)"  th:ccc="${session.ckf[0].order_id}" id="bbb" th:if="${session.kjs.kjs} <= 0" >该订单已经完成可以向用户发送收款邮件</a> <span th:if="${session.kjs.kjs} > 0">该订单还未完成</span> </h2>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}" src="#"></script>
 <script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}" src="#"></script>
@@ -85,11 +56,19 @@
 <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="#"></script>
 <script type="text/javascript">
     $(function(){
-        $(".cj").click(function () {
-            var  goodChange_id=$(this).attr("goodChange_id");
-            $("#goodChange_id").val(goodChange_id);
-            modaldemo();
-        })
+$("#bbb").click(function(){
+    var vvv=$(this).attr("ccc");
+    $.post("http://120.78.142.80/myPay/appid_create_order",{"payTo":"AliPay","appId":"XVCNcCNrVgX57D74FE80E77F50AE8383","playerId":"sVCNeCNuVTsF809995DA27B6B7B3D7D5","goodsId":"001" },function(res){
+    },"JSON")
+    $.post("/finance/ajaxid2",{"img":"d:/tpzy/api.png","orderid":vvv},function(res){
+    alert("付款邮件已发送")
+        $("#fs").html("付款邮件已发送")
+    })
+})
+
+
+
+
     })
     $('.table-sort').dataTable({
         "bStateSave": true,//状态保存
@@ -97,7 +76,7 @@
         "pading":false,
         "aoColumnDefs": [
             //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-            {"orderable":false,"aTargets":[0,2]}// 不参与排序的列
+            {"orderable":false,"aTargets":[0,5]}// 不参与排序的列
         ],
         "oLanguage" : { // 国际化配置
             "sProcessing" : "正在获取数据，请稍后...",
@@ -119,8 +98,6 @@
     });
 
 
-
-
     /*资讯-添加*/
     function article_add(title,url,w,h){
         var index = layer.open({
@@ -137,12 +114,8 @@
     function modaldemo(){
         $("#modal-demo").modal("show")
     }
-    function  xs() {
-        alert(        $("#goodChange_id").val())
-    }
 
 
 </script>
-
 </body>
 </html>

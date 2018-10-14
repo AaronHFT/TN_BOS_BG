@@ -1,21 +1,21 @@
 package org.java.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @Mapper
 public interface financeMapper {
-    public HashMap<String,Object> onefinance(HashMap<String,Object>h);
-    public List<HashMap<String,Object>>getAll();
-    public  void upd(HashMap<String,Object>h);
-    public   List<HashMap<String,Object>> outAll();
-    public  void outupd(HashMap<String,Object>h);
-    public  List<HashMap<String,Object>> rkf(HashMap<String,Object>h);
-    public List<HashMap<String,Object>> ckf(HashMap<String,Object>h);
-    public  HashMap<String,Object> kjs(HashMap<String,Object>h);
-    public  HashMap<String,Object> ddxx(HashMap<String,Object>h);
-    public  List<HashMap<String,Object>> dd();
+    public Map<String,Object> onefinance(Map<String,Object>h);
+    public List<Map<String,Object>> getAll();
+    public  void upd(Map<String,Object>h);
+    public   List<Map<String,Object>> outAll();
+    public  void outupd(Map<String,Object>h);
+    public  List<Map<String,Object>> rkf(Map<String,Object>h);
+    public List<Map<String,Object>> ckf(Map<String,Object>h);
+    public  Map<String,Object> kjs(Map<String,Object>h);
+    public  Map<String,Object> ddxx(Map<String,Object>h);
+    public  List<Map<String,Object>> dd();
 }

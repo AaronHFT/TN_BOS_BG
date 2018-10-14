@@ -1,6 +1,6 @@
 package org.java.web.finance;
 
-import org.java.Service.financeService;
+import org.java.service.financeService;
 import org.java.util.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 进行财务处理的Controller
@@ -65,17 +65,17 @@ public class financeController {
         System.out.print("进入了ajax2方法");
        String img=res.getParameter("img");
         String orderid=res.getParameter("orderid");
-        HashMap<String,Object>h=new HashMap<String, Object>();
+        HashMap<String,Object> h=new HashMap<>();
         h.put("id",orderid);
         String table="<table border='1px' width='400px' height='200px' ><tr><td>出入库时间</td><td>物品名称</td><td>数量</td><td>重量</td><td>应付金额</td><td>类别</td></tr>";
         String rkf="";
         double nummoney=0;
-        for (HashMap<String,Object>h4:fs.rkf(h)) {
+        for (Map<String,Object>h4:fs.rkf(h)) {
             rkf+="<tr><td>"+h4.get("goodChange_inTime")+"</td><td>"+h4.get("good_name")+"</td><td>"+h4.get("goodChange_num")+"</td><td>"+h4.get("goodChange_weight")+"</td><td>"+h4.get("rkf")+"</td><td>入库</td></tr>";
             nummoney+=Double.parseDouble(h4.get("rkf")+"");
         }
         String ckf="";
-        for (HashMap<String,Object>h4:fs.ckf(h)) {
+        for (Map<String,Object>h4:fs.ckf(h)) {
             ckf+="<tr><td>"+h4.get("goodChange_inTime")+"</td><td>"+h4.get("good_name")+"</td><td>"+h4.get("goodChange_num")+"</td><td>"+h4.get("goodChange_weight")+"</td><td>"+h4.get("ckf")+"</td><td>出库</td></tr>";
             nummoney+=Double.parseDouble(h4.get("ckf")+"");
         }
@@ -88,14 +88,14 @@ public class financeController {
         return "";
     }
     @RequestMapping("/outupd")
-    public String outupd(@RequestParam HashMap<String,Object>h){
+    public String outupd(@RequestParam Map<String,Object>h){
         fs.outupd(h);
         return "redirect:/finance/outjs";
     }
 
     @RequestMapping("/upd")
     public String upd(HttpSession ses){
-        HashMap<String,Object> hh=new HashMap<String,Object>();
+        Map<String,Object> hh=new HashMap<String,Object>();
         hh.put("id",ajaxid);
         fs.upd(hh);
         return "redirect:/finance/wjs";
@@ -109,14 +109,14 @@ public class financeController {
         return "flow/account";
     }
     @RequestMapping("/settleaccounts")
-    public  String settleaccounts(@RequestParam HashMap<String, Object> h,HttpSession ses){
+    public  String settleaccounts(@RequestParam Map<String, Object> h,HttpSession ses){
         System.out.print("QWQ");
         System.out.print(fs.onefinance(h));
         ses.setAttribute("obj",fs.onefinance(h));
         return "/flow/settleaccounts";
     }
     @RequestMapping("/ckxq")
-    public  String ckxq(@RequestParam HashMap<String, Object> h,HttpSession ses){
+    public  String ckxq(@RequestParam Map<String, Object> h,HttpSession ses){
         ses.setAttribute("rkf",fs.rkf(h));
         ses.setAttribute("ckf",fs.ckf(h));
         ses.setAttribute("kjs",fs.kjs(h));
