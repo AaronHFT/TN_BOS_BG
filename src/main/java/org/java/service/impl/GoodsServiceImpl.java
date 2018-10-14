@@ -96,4 +96,59 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Map<String, Object>> findAllReturnOrder() {
         return goodsMapper.findAllReturnOrder();
     }
+
+    @Override
+    public List<Map<String, Object>> findCheckGoodAndHedgingNum() {
+        return goodsMapper.findCheckGoodAndHedgingNum();
+    }
+
+    @Override
+    public Map<String, Object> findGoodNumByLine(Map<String, Object> map) {
+        return goodsMapper.findGoodNumByLine(map);
+    }
+
+    @Override
+    public void createCheckGood(Map<String, Object> map) {
+        goodsMapper.createCheckGood(map);
+    }
+
+    @Override
+    public List<Map<String,Object>> findCheckGoodDetail(Map<String, Object> map) {
+        return goodsMapper.findCheckGoodDetail(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> findCheckGoodDetailByLineAndDate(Map<String, Object> map) {
+        return goodsMapper.findCheckGoodDetailByLineAndDate(map);
+    }
+
+    @Override
+    public void updateCheckGoodByLineAndDate(Map<String, Object> map) {
+        goodsMapper.updateCheckGoodByLineAndDate(map);
+    }
+
+    @Override
+    public Map<String, Object> findGoodInStoreByLine(Map<String, Object> map) {
+        return goodsMapper.findGoodInStoreByLine(map);
+    }
+
+    @Override
+    public void checkGoodOutStore(Map<String, Object> map) {
+        goodsMapper.checkGoodOutStore(map);
+    }
+
+    @Override
+    public void updateCheckGoodState(Map<String, Object> map) {
+        goodsMapper.updateCheckGoodState(map);
+    }
+
+    @Override
+    public void updateGoodForCheck(Map<String, Object> map) {
+        goodsMapper.updateGoodForCheck(map);
+    }
+
+    @Override
+    public void unitTrans(Map<String, Object> map) {
+        goodsMapper.unitTrans(map);
+    }
 }

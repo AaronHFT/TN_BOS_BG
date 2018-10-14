@@ -4,7 +4,11 @@
 
     <!--查询全部收货单-->
     <select id="findAllGoodAccept" resultType="java.util.HashMap">
-        select * from goodAccept
+        SELECT *
+FROM goodAccept g,`order` o
+WHERE g.order_id=o.order_id
+  AND o.order_state="已收货"
+  AND g.goodAccept_destroyNum=g.goodAccept_handleNum
     </select>
 
     <!--查询库存-->
@@ -93,7 +97,7 @@ WHERE state=0
 
     <!--创建退货订单-->
     <insert id="createReturnOrder" parameterType="java.util.HashMap">
-        INSERT INTO `order` VALUES(#{returnOrderId},#{client_id},'9',#{returnDate},#{con_id},#{webnodes_id},'暂无',#{store_id},'暂无');
+        INSERT INTO `order` VALUES(#{returnOrderId},#{client_id},'9',#{returnDate},#{con_id},#{webnodes_id},'调度运输',#{store_id},'暂无');
     </insert>
 
     <!--添加退货历史记录-->
@@ -115,4 +119,97 @@ WHERE state=0
         where o.order_id=r.returnHistory_orderId
         and w.webNodes_id=o.webNodes_id
     </select>
+
+    <!--查询最后一次盘点及对冲情况-->
+    <select id="findCheckGoodAndHedgingNum" resultType="java.util.HashMap">
+        SELECT *,(SELECT SUM(checkGood_errorNum) FROM checkGood c3 WHERE c1.checkGood_goodLine=c3.checkGood_goodLine) hedgingNum
+FROM checkGood c1,goodChange g1,good g2
+WHERE checkGood_date=(SELECT MAX(checkGood_date) FROM checkGood c2 WHERE c1.checkGood_goodLine=c2.checkGood_goodLine)
+      AND c1.checkGood_goodLine=g1.good_line
+      AND g1.goodChange_goodId=g2.good_id
+      AND g1.state=0;
+    </select>
+
+    <!--根据货品的条形码查看货品剩余量-->
+    <select id="findGoodNumByLine" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT *,a.goodChange_num - IFNULL((SELECT SUM(goodChange_num) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS num,a.goodChange_weight - IFNULL((SELECT SUM(goodChange_weight) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS weight,a.goodChange_volume - IFNULL((SELECT SUM(goodChange_volume) FROM goodChange c WHERE state = 1 AND a.good_line=c.good_line),0) AS volume
+FROM goodChange a
+WHERE state=0
+      AND (a.goodChange_num - (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line)>0 OR (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line) IS NULL)
+      AND a.good_line=#{goodLine};
+    </select>
+
+    <!--添加盘点记录-->
+    <insert id="createCheckGood" parameterType="java.util.HashMap">
+        INSERT INTO checkGood VALUES(0,#{goodLine},#{checkNum},#{errorNum},#{checkDate},#{num},#{checkState});
+    </insert>
+
+    <!--根据条形码查看盘点详情-->
+    <select id="findCheckGoodDetail" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT *
+FROM checkGood c1,goodChange g1,good g2
+WHERE c1.checkGood_goodLine=g1.good_line
+      AND g1.goodChange_goodId=g2.good_id
+      AND g1.state=0
+      AND c1.checkGood_goodLine=#{goodLine};
+    </select>
+
+    <!--根据条形码和日期查看是否有盘点数量-->
+    <select id="findCheckGoodDetailByLineAndDate" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT *
+FROM checkGood c1,goodChange g1,good g2
+WHERE c1.checkGood_goodLine=g1.good_line
+      AND g1.goodChange_goodId=g2.good_id
+      AND g1.state=0
+      AND c1.checkGood_goodLine=#{goodLine}
+      AND c1.checkGood_date=#{checkDate};
+    </select>
+
+    <!--根据条形码和日期修改盘点数量-->
+    <update id="updateCheckGoodByLineAndDate" parameterType="java.util.HashMap">
+        UPDATE checkGood
+        set checkGood_num=#{checkNum},checkGood_errorNum=#{errorNum},checkGood_state=#{checkState}
+        where checkGood_goodLine=#{goodLine} and checkGood_date=#{checkDate};
+    </update>
+
+    <!--根据条形码查看货品入库信息-->
+    <select id="findGoodInStoreByLine" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        select *
+        from goodChange g1,good g2
+        where good_line=#{goodLine}
+          and g1.goodChange_goodId=g2.good_id
+          and state=0;
+    </select>
+    
+    <!--添加盘点出库-->
+    <insert id="checkGoodOutStore" parameterType="java.util.HashMap">
+        INSERT INTO goodchange VALUES(#{outStoreCode},#{good_line},#{goodChange_id},#{store_position_id},#{goodChange_goodId},#{truck_id},#{pilot_id},#{Order_id},#{client_id},#{newStoreTime},#{goodChange_producedDate},#{goodChange_secureDate},#{outStoreNum},#{good_unit},#{outStoreW},#{outStoreV},#{goodChange_lv},'8','1');
+    </insert>
+
+    <!--添加盘点入库-->
+    <insert id="checkGoodInStore" parameterType="java.util.HashMap">
+        INSERT INTO goodchange VALUES(#{inStoreCode},#{newGoodLine},#{goodChange_id},#{store_position_id},#{goodChange_goodId},#{truck_id},#{pilot_id},#{Order_id},#{client_id},#{newStoreTime},#{goodChange_producedDate},#{goodChange_secureDate},#{inStoreNum},#{good_unit},#{inStoreW},#{inStoreV},#{goodChange_lv},'8','1');
+    </insert>
+
+    <!--根据条形码和日期修改盘点状态-->
+    <update id="updateCheckGoodState" parameterType="java.util.HashMap">
+        update checkGood
+        set checkGood_state="已处理"
+        where checkGood_date=#{checkGoodDate}
+          and checkGood_goodLine=#{goodLine}
+    </update>
+
+    <!--修改库存数量-->
+    <update id="updateGoodForCheck" parameterType="java.util.HashMap">
+        update good
+        set good_num=#{n},good_weight=#{w},good_volume=#{v}
+        where good_id=#{goodId}
+    </update>
+
+    <!--修改产品规格-->
+    <update id="unitTrans" parameterType="java.util.HashMap">
+        update goodAccept
+        set goodAccept_standard=#{newStandard},goodAccept_acceptNum=#{newNum}
+        where order_id=#{orderId}
+    </update>
 </mapper>

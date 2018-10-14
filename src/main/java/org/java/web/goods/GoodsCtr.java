@@ -45,7 +45,7 @@ public class GoodsCtr {
         return "redirect:/goods/findAllGood";
     }
 
-    //产品单位转换
+    //跳转到产品单位转换
     @RequestMapping("/unitConversion")
     public String unitConversion(Model model){
         List<Map<String,Object>> list=goodsService.findAllGoodAccept();
@@ -146,8 +146,136 @@ public class GoodsCtr {
         returnMap.put("weight",Double.parseDouble(returnMap.get("goodAccept_destroyNum").toString())/Double.parseDouble(returnMap.get("goodAccept_acceptNum").toString())*Double.parseDouble(returnMap.get("goodAccept_weight").toString()));
         returnMap.put("volume",Double.parseDouble(returnMap.get("goodAccept_destroyNum").toString())/Double.parseDouble(returnMap.get("goodAccept_acceptNum").toString())*Double.parseDouble(returnMap.get("goodAccept_volume").toString()));
         goodsService.createReturnHistoryForBad(returnMap);
+        map.put("goodAccept_destroyNum",returnMap.get("goodAccept_destroyNum"));
         goodsService.updateGoodAcceptAfterReturn(map);
         model.addAttribute("list",goodsService.findAllReturnOrder());
         return "/goods/findReturnOrder";
+    }
+
+    //查询退货记录
+    @RequestMapping("/findAllReturnOrder")
+    public String findAllReturnOrder(Model model){
+        model.addAttribute("list",goodsService.findAllReturnOrder());
+        return "/goods/findReturnOrder";
+    }
+
+    //跳转盘点处理
+    @RequestMapping("/lineIndex")
+    public String lineIndex(Model model){
+        model.addAttribute("list",goodsService.findCheckGoodAndHedgingNum());
+        return "/goods/lineIndex";
+    }
+
+    //添加盘点记录
+    @RequestMapping("/createCheckGood")
+    public String createCheckGood(@RequestParam Map<String,Object> map){
+        System.out.println(map);
+        Map<String,Object> goodNumMap=goodsService.findGoodNumByLine(map);
+        System.out.println(goodNumMap);
+        for (String s:goodNumMap.keySet()) {
+            map.put(s,goodNumMap.get(s));
+        }
+        System.out.println(map);
+        String checkDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date().getTime());
+        map.put("checkDate",checkDate);
+        int errorNum=Integer.parseInt(map.get("checkNum").toString())-Integer.parseInt(map.get("num").toString());
+        map.put("errorNum",errorNum);
+        if(errorNum==0){
+            map.put("checkState","正常");
+        }else{
+            map.put("checkState","未处理");
+        }
+
+        //查询数据库有没有当天的盘点记录，有的话进行修改，没有的话进行添加
+        List<Map<String,Object>> listByLineAndDate=goodsService.findCheckGoodDetailByLineAndDate(map);
+        if (listByLineAndDate.size()>0){
+            goodsService.updateCheckGoodByLineAndDate(map);
+        }else{
+            goodsService.createCheckGood(map);
+        }
+        return "redirect:/goods/lineIndex";
+    }
+
+    //根据条形码查询详情
+    @RequestMapping("/findCheckGoodDetail")
+    public String findCheckGoodDetail(Model model,@RequestParam Map<String,Object> map){
+        List<Map<String,Object>> list=goodsService.findCheckGoodDetail(map);
+        System.out.println(list.get(0));
+        model.addAttribute("list",list);
+        return "/goods/findCheckGoodDetail";
+    }
+
+    //盘点入库
+    @RequestMapping("/checkGoodInStore")
+    public String checkGoodInStore(@RequestParam Map<String,Object> map){
+
+        Map<String,Object> goodInStoreMap=goodsService.findGoodInStoreByLine(map);
+        //生成入库编号
+        String outStoreCode=System.currentTimeMillis()+"";
+        goodInStoreMap.put("outStoreCode",outStoreCode);
+        goodInStoreMap.put("newStoreTime",new SimpleDateFormat("yyyy-MM-dd").format(new Date().getTime()));
+
+        //总重量
+        double weight=Double.parseDouble(goodInStoreMap.get("good_weight").toString());
+        double volume=Double.parseDouble(goodInStoreMap.get("good_volume").toString());
+        int errorNum=Integer.parseInt(map.get("errorNum").toString());
+        int num=Integer.parseInt(goodInStoreMap.get("good_num").toString());
+        goodInStoreMap.put("outStoreNum",errorNum);
+        goodInStoreMap.put("outStoreW",weight*errorNum/num);
+        goodInStoreMap.put("outStoreV",volume*errorNum/num);
+        //生成新的入库条形码
+        goodInStoreMap.put("newGoodLine",outStoreCode+goodInStoreMap.get("good_code"));
+
+
+        map.put("n",num+errorNum);
+        map.put("w",weight+weight*errorNum/num);
+        map.put("v",volume+volume*errorNum/num);
+        map.put("goodId",goodInStoreMap.get("good_id"));
+        goodsService.updateCheckGoodState(map);
+        goodsService.updateGoodForCheck(map);
+        return "redirect:/goods/lineIndex";
+    }
+
+    //盘点出库
+    @RequestMapping("/checkGoodOutStore")
+    public String checkGoodOutStore(@RequestParam Map<String,Object> map){
+        Map<String,Object> goodOutStoreMap=goodsService.findGoodInStoreByLine(map);
+        System.out.println(goodOutStoreMap);
+        //生成出库编号
+        String outStoreCode=System.currentTimeMillis()+"";
+        goodOutStoreMap.put("outStoreCode",outStoreCode);
+        goodOutStoreMap.put("newStoreTime",new SimpleDateFormat("yyyy-MM-dd").format(new Date().getTime()));
+
+        //总重量
+        double weight=Double.parseDouble(goodOutStoreMap.get("good_weight").toString());
+        double volume=Double.parseDouble(goodOutStoreMap.get("good_volume").toString());
+        int errorNum=Integer.parseInt(map.get("errorNum").toString());
+        int num=Integer.parseInt(goodOutStoreMap.get("good_num").toString());
+        goodOutStoreMap.put("outStoreNum",-1*errorNum);
+        goodOutStoreMap.put("outStoreW",-1*weight*errorNum/num);
+        goodOutStoreMap.put("outStoreV",-1*volume*errorNum/num);
+        goodsService.checkGoodOutStore(goodOutStoreMap);
+        map.put("n",num+errorNum);
+        map.put("w",weight+weight*errorNum/num);
+        map.put("v",volume+volume*errorNum/num);
+        map.put("goodId",goodOutStoreMap.get("good_id"));
+        goodsService.updateCheckGoodState(map);
+        goodsService.updateGoodForCheck(map);
+        return "redirect:/goods/lineIndex";
+    }
+
+    //产品计量转换
+    @RequestMapping("/unitTrans")
+    public String unitTrans(@RequestParam Map<String,Object> map){
+        int newNum=Integer.parseInt(map.get("newNum").toString());
+        double weight=Double.parseDouble(map.get("weight").toString());
+        double volume=Double.parseDouble(map.get("volume").toString());
+        if (weight>0){
+            map.put("newStandard",weight/newNum+" 千克/箱");
+        }else{
+            map.put("newStandard",volume/newNum+" 立方/箱");
+        }
+        goodsService.unitTrans(map);
+        return "redirect:/goods/unitConversion";
     }
 }

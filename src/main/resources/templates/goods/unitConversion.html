@@ -51,7 +51,15 @@
                 <td th:text="${t.goodAccept_weight }"></td>
                 <td th:text="${t.goodAccept_volume }"></td>
                 <td th:text="${t.goodAccept_unit }"></td>
-                <td><a>等级转换</a>&nbsp;&nbsp;<a></a></td>
+                <td>
+                    <form method="post" action="/goods/unitTrans">
+                        <input type="number" name="newNum" style="width:50px">
+                        <input type="hidden" name="weight" th:value="${t.goodAccept_weight }">
+                        <input type="hidden" name="volume" th:value="${t.goodAccept_volume }">
+                        <input type="hidden" name="orderId" th:value="${t.order_id }">
+                        <button name="" type="submit"><i class="icon Hui-iconfont">&#xe60c;</i></button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -108,8 +116,6 @@
     function article_edit(title,url,id,w,h){
         layer_show(title,url,w,h);
     }
-
-
 </script>
 </body>
 </html>

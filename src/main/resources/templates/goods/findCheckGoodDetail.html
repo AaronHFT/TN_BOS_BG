@@ -16,54 +16,37 @@
     <title>查询库存</title>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>货物管理 <span class="c-gray en">&gt;</span>库存详情 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>货物管理 <span class="c-gray en">&gt;</span>查询库存 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div>
     <div>
         <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
             <thead>
             <tr class="text-c">
                 <th width="25"><input type="checkbox" name="good" value=""></th>
-                <th width="240">入库编号</th>
-                <th width="240">条形码</th>
-                <th width="120">收货流水号</th>
+                <th width="120">条形码</th>
                 <th width="120">货物名称</th>
                 <th width="120">货物代码</th>
                 <th width="120">规格</th>
-                <!--<th width="60">批号</th>-->
-                <th width="60">数量</th>
-                <th width="60">单位</th>
-                <th width="80">重量</th>
-                <th width="80">体积</th>
-                <th width="150">入库日期</th>
-                <th width="150">生产日期</th>
-                <th width="150">保质期</th>
-                <th width="120">操作</th>
+                <th width="120">盘点数量</th>
+                <th width="120">应有数量</th>
+                <th width="120">误差值</th>
+                <th width="120">单位</th>
+                <th width="120">盘点日期</th>
             </tr>
             </thead>
             <tbody>
             <tr class="text-c" th:each=" t:${list}">
-                <td><input type="checkbox" value="" name="good" th:value="${t.goodChange_Code }"></td>
-                <td th:text="${t.goodChange_Code }"></td>
-                <td th:text="${t.good_line }"></td>
-                <td th:text="${t.goodChange_id }"></td>
+                <td><input type="checkbox" value="" name="good" th:value="${t.checkGood_id }"></td>
+                <td th:text="${t.checkGood_goodLine }"></td>
                 <td th:text="${t.good_name }"></td>
                 <td th:text="${t.good_code }"></td>
                 <td th:text="${t.good_standard }"></td>
-                <!--<td th:text="${t.good_lotNum }"></td>-->
-                <td th:text="${t.num }"></td>
+                <td th:text="${t.checkGood_num }"></td>
+                <td th:text="${t.checkGood_expectNum }"></td>
+                <td th:text="${t.checkGood_errorNum }" th:if="${t.checkGood_errorNum != 0}" style="color: red;font-weight: bolder"></td>
+                <td th:text="${t.checkGood_errorNum }" th:if="${t.checkGood_errorNum == 0}" style="color: green;font-weight: bolder"></td>
                 <td th:text="${t.good_unit }"></td>
-                <td th:text="${t.weight }"></td>
-                <td th:text="${t.volume }"></td>
-                <td th:text="${#dates.format(t.goodChange_inTime,'yyyy-MM-dd') }"></td>
-                <td th:text="${#dates.format(t.goodChange_producedDate,'yyyy-MM-dd') }"></td>
-                <td th:text="${#dates.format(t.goodChange_secureDate,'yyyy-MM-dd') }" th:if="${t.goodChange_secureDate >= #dates.createNow()}" style="color: green;font-weight: bolder"></td>
-                <td th:text="${#dates.format(t.goodChange_secureDate,'yyyy-MM-dd') }" th:if="${t.goodChange_secureDate < #dates.createNow()}" style="color: red;font-weight: bolder"></td>
-                <td>
-                    <a href="javascript:void(0)">退货出库</a>
-                    <a href="javascript:void(0)" th:onclick="'uselessOut(\''+${t.good_line }+'\',\''+${t.good_id }+'\')'">
-                        报废出库
-                    </a>
-                </td>
+                <td th:text="${#dates.format(t.checkGood_date,'yyyy-MM-dd')}"></td>
             </tr>
             </tbody>
         </table>
@@ -120,15 +103,6 @@
     /*资讯-编辑*/
     function article_edit(title,url,id,w,h){
         layer_show(title,url,w,h);
-    }
-
-    /*用户-删除*/
-    function uselessOut(goodLine,goodId){
-        layer.confirm('确认要报废出库吗？',{btn:['确定','取消'],yes:function() {
-                location.href="/goods/uselessOut?goodLine="+goodLine+"&goodId="+goodId;
-            },cancel:function() {
-
-            }},{title:'提示'})
     }
 
 

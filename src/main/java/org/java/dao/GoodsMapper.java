@@ -42,4 +42,26 @@ public interface GoodsMapper {
     public void updateGoodAcceptAfterReturn(Map<String,Object> map);
 
     public List<Map<String,Object>> findAllReturnOrder();
+
+    public List<Map<String,Object>> findCheckGoodAndHedgingNum();
+
+    public Map<String,Object> findGoodNumByLine(Map<String,Object> map);
+
+    public void createCheckGood(Map<String,Object> map);
+
+    public List<Map<String,Object>> findCheckGoodDetail(Map<String,Object> map);
+
+    public List<Map<String,Object>> findCheckGoodDetailByLineAndDate(Map<String,Object> map);
+
+    public void updateCheckGoodByLineAndDate(Map<String,Object> map);
+
+    public Map<String,Object> findGoodInStoreByLine(Map<String,Object> map);
+
+    public void checkGoodOutStore(Map<String,Object> map);
+
+    public void updateCheckGoodState(Map<String,Object> map);
+
+    public void updateGoodForCheck(Map<String,Object> map);
+
+    public void unitTrans(Map<String,Object> map);
 }
