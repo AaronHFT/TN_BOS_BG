@@ -67,4 +67,13 @@ public class CustomerServiceImpl  implements CustomerService {
         cusMapper.editContact(map);
     }
 
+    @Override
+    public void  delContactsByCusId(String id){
+        cusMapper.delContactsByCusId(id);
+    }
+
+    @Override
+    public Integer findOrdById(String id) {
+        return cusMapper.findOrdById(id);
+    }
 }

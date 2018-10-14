@@ -30,4 +30,8 @@ public interface CustomerService {
     void addContact(Map<String,Object> map);
 
     void editContact(Map<String,Object> map);
+
+    void delContactsByCusId(String id);
+
+    Integer findOrdById(String id);
 }

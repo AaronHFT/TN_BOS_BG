@@ -42,4 +42,10 @@ public interface CustomerMapper {
 
     //编辑联系人
     void editContact(Map<String,Object> map);
+
+    //删除客户时候同时删除所有联系人
+    void delContactsByCusId(String id);
+
+    //删除客户时查询是否有未完成订单
+    Integer findOrdById(String id);
 }

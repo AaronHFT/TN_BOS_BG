@@ -53,4 +53,12 @@
 	WHERE
 	`con_id` = #{con_id};
     </update>
+
+    <delete id="delContactsByCusId" parameterType="java.lang.String">
+        delete from contacts where cus_id = #{delId};
+    </delete>
+
+    <select id="findOrdById" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM `order` WHERE cus_id =#{delId};
+    </select>
 </mapper>

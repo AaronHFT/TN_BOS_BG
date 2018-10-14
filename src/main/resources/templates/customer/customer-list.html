@@ -184,12 +184,13 @@ function customer_del(obj,id){
             url: '/customer/delCustomerById',
             data:{"delId":id},
             dataType: 'text',
-            success: function(){
-                layer.msg('已删除!',{icon:1,time:1000});
-                location.href="/customer/showAll";
-            },
-            error:function(data) {
-                console.log(data.msg);
+            success: function(data){
+                if(data == '0'){
+                    layer.msg('已删除!',{icon:1,time:1000});
+                    location.href="/customer/showAll";
+				}else{
+                    layer.msg('删除失败,存在未完成订单!',{icon:1,time:1000});
+				}
             },
         });
     });

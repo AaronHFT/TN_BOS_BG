@@ -39,8 +39,14 @@ public class CustomerController {
     @RequestMapping("delCustomerById")
     @ResponseBody
     public String delCustomer(@RequestParam Map<String,Object> m){
-        cusService.delCustomerById(m.get("delId").toString());
-        return "";
+        Integer i = cusService.findOrdById(m.get("delId").toString());
+        if(i == 0){
+            cusService.delCustomerById(m.get("delId").toString());
+            cusService.delContactsByCusId(m.get("delId").toString());
+        }else{
+            return i.toString();
+        }
+        return "0";
     }
 
     //新增客户
