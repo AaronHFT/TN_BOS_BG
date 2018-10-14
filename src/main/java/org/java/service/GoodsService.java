@@ -62,4 +62,6 @@ public interface GoodsService {
     public void updateGoodForCheck(Map<String,Object> map);
 
     public void unitTrans(Map<String,Object> map);
+
+    public void checkGoodInStore(Map<String,Object> map);
 }

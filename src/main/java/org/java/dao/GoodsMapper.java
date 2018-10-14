@@ -59,6 +59,8 @@ public interface GoodsMapper {
 
     public void checkGoodOutStore(Map<String,Object> map);
 
+    public void checkGoodInStore(Map<String,Object> map);
+
     public void updateCheckGoodState(Map<String,Object> map);
 
     public void updateGoodForCheck(Map<String,Object> map);
