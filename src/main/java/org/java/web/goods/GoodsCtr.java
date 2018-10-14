@@ -211,8 +211,8 @@ public class GoodsCtr {
 
         Map<String,Object> goodInStoreMap=goodsService.findGoodInStoreByLine(map);
         //生成入库编号
-        String outStoreCode=System.currentTimeMillis()+"";
-        goodInStoreMap.put("outStoreCode",outStoreCode);
+        String inStoreCode=System.currentTimeMillis()+"";
+        goodInStoreMap.put("inStoreCode",inStoreCode);
         goodInStoreMap.put("newStoreTime",new SimpleDateFormat("yyyy-MM-dd").format(new Date().getTime()));
 
         //总重量
@@ -220,12 +220,12 @@ public class GoodsCtr {
         double volume=Double.parseDouble(goodInStoreMap.get("good_volume").toString());
         int errorNum=Integer.parseInt(map.get("errorNum").toString());
         int num=Integer.parseInt(goodInStoreMap.get("good_num").toString());
-        goodInStoreMap.put("outStoreNum",errorNum);
-        goodInStoreMap.put("outStoreW",weight*errorNum/num);
-        goodInStoreMap.put("outStoreV",volume*errorNum/num);
+        goodInStoreMap.put("inStoreNum",errorNum);
+        goodInStoreMap.put("inStoreW",weight*errorNum/num);
+        goodInStoreMap.put("inStoreV",volume*errorNum/num);
         //生成新的入库条形码
-        goodInStoreMap.put("newGoodLine",outStoreCode+goodInStoreMap.get("good_code"));
-
+        goodInStoreMap.put("newGoodLine",inStoreCode+goodInStoreMap.get("good_code"));
+        goodsService.checkGoodInStore(goodInStoreMap);
 
         map.put("n",num+errorNum);
         map.put("w",weight+weight*errorNum/num);

@@ -151,4 +151,9 @@ public class GoodsServiceImpl implements GoodsService {
     public void unitTrans(Map<String, Object> map) {
         goodsMapper.unitTrans(map);
     }
+
+    @Override
+    public void checkGoodInStore(Map<String, Object> map) {
+        goodsMapper.checkGoodInStore(map);
+    }
 }

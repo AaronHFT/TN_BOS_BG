@@ -32,7 +32,7 @@ FROM goodChange a,good
 WHERE state=0
       AND (a.goodChange_num - (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line)>0 OR (SELECT SUM(goodChange_num) FROM goodChange b WHERE state = 1 AND a.good_line=b.good_line) IS NULL)
       AND a.goodChange_goodId=good.good_id
-      AND a.goodChange_goodId=1;
+      AND a.goodChange_goodId=#{goodId};
 
     </select>
 
@@ -188,7 +188,7 @@ WHERE c1.checkGood_goodLine=g1.good_line
 
     <!--添加盘点入库-->
     <insert id="checkGoodInStore" parameterType="java.util.HashMap">
-        INSERT INTO goodchange VALUES(#{inStoreCode},#{newGoodLine},#{goodChange_id},#{store_position_id},#{goodChange_goodId},#{truck_id},#{pilot_id},#{Order_id},#{client_id},#{newStoreTime},#{goodChange_producedDate},#{goodChange_secureDate},#{inStoreNum},#{good_unit},#{inStoreW},#{inStoreV},#{goodChange_lv},'8','1');
+        INSERT INTO goodchange VALUES(#{inStoreCode},#{newGoodLine},#{goodChange_id},#{store_position_id},#{goodChange_goodId},#{truck_id},#{pilot_id},#{Order_id},#{client_id},#{newStoreTime},#{goodChange_producedDate},#{goodChange_secureDate},#{inStoreNum},#{good_unit},#{inStoreW},#{inStoreV},#{goodChange_lv},'8','0');
     </insert>
 
     <!--根据条形码和日期修改盘点状态-->
